@@ -3,9 +3,8 @@ import pynetbox
 # Access environment variables
 param = sys.argv[1]
 #print parameters
-print(param1)
-print(param2)
-print(param3)
+print(param)
+
 nb = pynetbox.api(
         url='https://netbox.cbc-rc.ca/',
         token= param
