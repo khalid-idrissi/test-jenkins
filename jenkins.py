@@ -21,10 +21,10 @@ def get_token():
 ####################################################################
 #                      update devices
 ####################################################################
-def update_generic_devices():
+def update_generic_devices(netboxtoken):
     nb = pynetbox.api(
         url='https://netbox.cbc-rc.ca/',
-        token='$netboxtoken'
+        token='netboxtoken'
     )
     nb.http_session.verify = False
     
@@ -38,8 +38,7 @@ def update_generic_devices():
 ####################################################################
 #                      Main Function
 ####################################################################
-if __name__ == '__main__':   
-    #update_generic_devices()
+if __name__ == '__main__':
     
     # Access environment variables
     netboxtoken = os.environ.get('netboxtoken')
@@ -48,5 +47,5 @@ if __name__ == '__main__':
     # Print values of variables
     print("netboxtoken:", netboxtoken)
     print("tokenpywire:", tokenpywire)
-    print('hello world')
+    update_generic_devices(netboxtoken)
    
