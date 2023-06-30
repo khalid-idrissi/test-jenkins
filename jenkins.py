@@ -29,14 +29,13 @@ def get_token():
 #                      update devices
 ####################################################################
 def update_generic_devices():
-     nb = pynetbox.api(
+    nb = pynetbox.api(
         url='https://netbox.cbc-rc.ca/',
         token='$netboxtoken'
     )
     nb.http_session.verify = False
     roles_bed = list(nb.dcim.device_roles.filter(tag="broadcast-endpoint-devices"))
     roles_app = list(nb.dcim.device_roles.filter(tag="applications"))
-
     devices = nb.dcim.devices.filter(tag='yaml-migration')
     print(len(devices))
     token = get_token()
