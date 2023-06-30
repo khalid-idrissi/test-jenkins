@@ -4,7 +4,7 @@ import os
 ####################################################################
 #                      Get Token
 ####################################################################
-def get_token():
+def get_token(tokenpywire):
 
     url_prod = 'https://pywire-app.cbc-rc.ca/api/v2/get_token/'
     headers = {
@@ -21,7 +21,7 @@ def get_token():
 ####################################################################
 #                      update devices
 ####################################################################
-def update_generic_devices(netboxtoken):
+def update_generic_devices(netboxtoken, tokenpywire):
     nb = pynetbox.api(
         url='https://netbox.cbc-rc.ca/',
         token='netboxtoken'
@@ -32,7 +32,7 @@ def update_generic_devices(netboxtoken):
     roles_app = list(nb.dcim.device_roles.filter(tag="applications"))
     devices = nb.dcim.devices.filter(tag='yaml-migration')
     print(len(devices))
-    token = get_token()
+    token = get_token(tokenpywire)
     print(token)
     
 ####################################################################
@@ -47,5 +47,5 @@ if __name__ == '__main__':
     # Print values of variables
     print("netboxtoken:", netboxtoken)
     print("tokenpywire:", tokenpywire)
-    update_generic_devices(netboxtoken)
+    update_generic_devices(netboxtoken, tokenpywire)
    
