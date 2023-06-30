@@ -1,7 +1,7 @@
 import sys
 import pynetbox
+import json
 import requests as req
-
 
 # Access environment variables
 tnetbox = sys.argv[1]
@@ -23,6 +23,7 @@ def get_token(tokenpywire):
     try:
         response = req.request("GET", url_prod, headers=headers)
         responseData = response.json()
+        print(responseData)
         return responseData['token']
 
     except req.exceptions.HTTPError as err:
