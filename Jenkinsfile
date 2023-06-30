@@ -1,21 +1,22 @@
 pipeline {
     agent any
     environment {
-        netboxtoken = credentials('netboxtoken')
-        tokenpywire = credentials('tokenpywire')
+        PARAM1 = "value1"
+        PARAM2 = "value2"
+		PARAM3 = credentials('netboxtoken')
     }
     stages {
-        stage('Install Packages') {
+        stage('Intsall Packages') {
             steps {
-                echo "Install Packages"
+				echo "Intsall Packages"
             }
         }
         stage('Test') {
             steps {
                 echo 'testing'
-                bat "python jenkins.py ${netboxtoken} ${tokenpywire}"
+                bat "python importation_equipements/jenkins.py ${PARAM1} ${PARAM2} ${PARAM3}"
+
             }
         }
     }
 }
-
