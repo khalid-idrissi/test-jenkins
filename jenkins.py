@@ -34,6 +34,7 @@ def update_generic_devices():
         token='$netboxtoken'
     )
     nb.http_session.verify = False
+    
     roles_bed = list(nb.dcim.device_roles.filter(tag="broadcast-endpoint-devices"))
     roles_app = list(nb.dcim.device_roles.filter(tag="applications"))
     devices = nb.dcim.devices.filter(tag='yaml-migration')
@@ -45,5 +46,6 @@ def update_generic_devices():
 #                      Main Function
 ####################################################################
 if __name__ == '__main__':   
-    update_generic_devices()
+    #update_generic_devices()
+    print('hello world')
    
