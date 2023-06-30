@@ -1,12 +1,5 @@
-import sys
-import pynetbox
+import os
 
-# Access environment variables
-netboxtoken = sys.argv[1]
-tokenpywire = sys.argv[2]
-#print parameters
-print("netboxtoken:", netboxtoken)
-print("tokenpywire:", tokenpywire)
 
 ####################################################################
 #                      Get Token
@@ -47,5 +40,13 @@ def update_generic_devices():
 ####################################################################
 if __name__ == '__main__':   
     #update_generic_devices()
+    
+    # Access environment variables
+    netboxtoken = os.environ.get('netboxtoken')
+    tokenpywire = os.environ.get('tokenpywire')
+
+    # Print values of variables
+    print("netboxtoken:", netboxtoken)
+    print("tokenpywire:", tokenpywire)
     print('hello world')
    

@@ -1,21 +1,21 @@
 pipeline {
     agent any
     environment {
-	netboxtoken = credentials('netboxtoken')
-	tokenpywire = credentials('tokenpywire')
+        netboxtoken = credentials('netboxtoken')
+        tokenpywire = credentials('tokenpywire')
     }
     stages {
-        stage('Intsall Packages') {
+        stage('Install Packages') {
             steps {
-		echo "Intsall Packages"
+                echo "Install Packages"
             }
         }
         stage('Test') {
             steps {
                 echo 'testing'
-                bat 'python jenkins.py $netboxtoken $tokenpywire'
-
+                bat "python jenkins.py"
             }
         }
     }
 }
+
