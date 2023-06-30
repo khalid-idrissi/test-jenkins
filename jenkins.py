@@ -28,12 +28,12 @@ def update_generic_devices(netboxtoken, tokenpywire):
     )
     nb.http_session.verify = False
     
-    roles_bed = list(nb.dcim.device_roles.filter(tag="broadcast-endpoint-devices"))
-    roles_app = list(nb.dcim.device_roles.filter(tag="applications"))
+    #roles_bed = list(nb.dcim.device_roles.filter(tag="broadcast-endpoint-devices"))
+    #roles_app = list(nb.dcim.device_roles.filter(tag="applications"))
     devices = nb.dcim.devices.filter(tag='yaml-migration')
     print(len(devices))
-    token = get_token(tokenpywire)
-    print(token)
+    #token = get_token(tokenpywire)
+    #print(token)
     
 ####################################################################
 #                      Main Function
