@@ -14,7 +14,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'testing'
-                bat "python importation_equipements/jenkins.py ${PARAM1} ${PARAM2} ${PARAM3}"
+                bat "python jenkins.py ${PARAM1} ${PARAM2} ${PARAM3}"
 
             }
         }
