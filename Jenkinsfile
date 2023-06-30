@@ -13,7 +13,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'testing'
-                bat "python jenkins.py"
+                bat "python jenkins.py $netboxtoken $tokenpywire"
             }
         }
     }
