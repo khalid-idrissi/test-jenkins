@@ -5,8 +5,8 @@ import pynetbox
 netboxtoken = sys.argv[1]
 tokenpywire = sys.argv[2]
 #print parameters
-print($netboxtoken)
-print($tokenpywire)
+print("netboxtoken:", netboxtoken)
+print("tokenpywire:", tokenpywire)
 
 ####################################################################
 #                      Get Token
