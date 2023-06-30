@@ -30,8 +30,8 @@ def update_generic_devices(netboxtoken, tokenpywire):
     
     #roles_bed = list(nb.dcim.device_roles.filter(tag="broadcast-endpoint-devices"))
     #roles_app = list(nb.dcim.device_roles.filter(tag="applications"))
-    devices = nb.dcim.devices.filter(tag='yaml-migration')
-    print(len(devices))
+    device = nb.dcim.devices.get(name='MTLMPXITC2004')
+    print(device)
     #token = get_token(tokenpywire)
     #print(token)
     
