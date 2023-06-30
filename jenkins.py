@@ -1,5 +1,6 @@
 import sys
 import pynetbox
+import requests as req
 
 
 # Access environment variables

@@ -8,6 +8,7 @@ pipeline {
         stage('Intsall Packages') {
             steps {
 				echo "Intsall Packages"
+				bat 'pip install requests'
             }
         }
         stage('Test') {
