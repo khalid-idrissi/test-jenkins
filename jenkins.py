@@ -104,7 +104,7 @@ def update_generic_devices(token):
     regexEmb    = "^[A-Za-z-0-9]+[E|X]LF\d{3}-(\d{2})$"  # embrionix
     switchregex = r"MTL-\w{4}-[a-zA-Z]{3}-\w+"
 
-    token = get_token()
+    #token = get_token()
     for dev in devices:
         app1 = re.match(regexApp1, dev.name)
         app2 = re.match(regexApp2, dev.name)
