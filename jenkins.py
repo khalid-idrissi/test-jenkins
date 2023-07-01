@@ -75,6 +75,9 @@ if __name__ == '__main__':
     
     token_result = get_token(tpywire)
     result = find_switch("MTLPREPPIMAW004", token_result)
-    print(result)
+    roles_bed = list(nb.dcim.device_roles.filter(tag="broadcast-endpoint-devices"))
+    roles_app = list(nb.dcim.device_roles.filter(tag="applications"))
+    print(roles_bed)
+    print(roles_app)
     
     
