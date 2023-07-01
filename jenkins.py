@@ -177,11 +177,9 @@ def get_token(tokenpywire):
         'Accept': 'application/json',
         'Authorization': 'Basic ' + tokenpywire
     }
-    print('Basic' + tokenpywire)
     try:
         response = req.request("GET", url_prod, headers=headers)
         responseData = response.json()
-        print(responseData)
         return responseData['token']
 
     except req.exceptions.HTTPError as err:
@@ -216,8 +214,8 @@ def update_generic_devices(token):
     match3_total = []
     match4_total = []
 
-    # devices = nb.dcim.devices.filter(tag='yaml-migration')
-    devices = nb.dcim.devices.filter(name='MTLMPXCAM008')
+    devices = nb.dcim.devices.filter(tag='yaml-migration')
+    # devices = nb.dcim.devices.filter(name='MTLMPXCAM008')
     print(len(devices))
     regexApp1   = "^[A-Za-z]{3}[A-Za-z]{3}[PNL][PBVC][WLUCEO]([A-Za-z]{3})\d{2}$"  # APPS
     regexApp2   = "^[A-Za-z]{3}[A-Za-z]{3}[PNL][PBVC]([A-Za-z]{3})\d{3}$"  # APPS
