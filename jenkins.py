@@ -32,10 +32,11 @@ def find_switch(device_name, token):
         else:
             if responseData['result'].split('-')[0] == device_name.split('-')[0] and responseData['result'].split('-')[
                2] == device_name.split('-')[2] and responseData['result'].split('-')[3] == device_name.split('-')[3]:
+               
                print(responseData['result'])
-                return responseData['result']
+               return responseData['result']
             else:
-                return None
+               return None
 
     else:
         print(str(response.status_code) + ' : ' + response.text + str(device_name))
