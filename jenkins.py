@@ -227,17 +227,18 @@ def update_generic_devices(token):
     switchregex = r"MTL-\w{4}-[a-zA-Z]{3}-\w+"
 
     #token = get_token()
-    for dev in devices:
-        app1 = re.match(regexApp1, dev.name)
-        app2 = re.match(regexApp2, dev.name)
-        app3 = re.match(regexApp3, dev.name)
-        bed = re.match(regexBpd, dev.name)
-        emb = re.match(regexEmb, dev.name)
-        swt = re.match(switchregex, dev.name)
+    for dev in devices[:10]:
+        # app1 = re.match(regexApp1, dev.name)
+        # app2 = re.match(regexApp2, dev.name)
+        # app3 = re.match(regexApp3, dev.name)
+        # bed = re.match(regexBpd, dev.name)
+        # emb = re.match(regexEmb, dev.name)
+        # swt = re.match(switchregex, dev.name)
 
         result = get_device_data_from_pywire(dev, token)
         print(dev.name)
         print(result)
+        print("*" * 50)
         # if app1:  # Applications type 1
             # match1_total.append(dev.name)
             # data = update_device_netbox(dev, result, app1.group(1), roles_app)
