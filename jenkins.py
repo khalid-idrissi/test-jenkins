@@ -21,6 +21,56 @@ nb.http_session.verify = False
 
 
 ####################################################################
+#                 Trace path by switch and port
+####################################################################
+def api_trace_path_byswitch_and_port(switch_port, token):
+
+    port = switch_port['port']
+    switch = switch_port['switch']
+
+    if 'B' in switch_port['port']:
+        matchport = re.search(r'B(\d+)P(\d+)', switch_port['port'])
+        matchsplit = re.search(r'S(\d+)', switch_port['split'])
+        if matchport:
+            first_int = int(matchport.group(1))
+            second_int = int(matchport.group(2))
+            if matchsplit:
+                third_int = int(matchsplit.group(1))
+                port = str(first_int) + '/' + str(second_int) + '/' + str(third_int)
+            else:
+                return {}
+        else:
+            return {}
+
+    if '*' in switch_port['port']:
+        port = re.findall(r'\d+', switch_port['port'])[0]
+
+    url = 'https://pywire-app.cbc-rc.ca/api/v2/tracedpathbyswitchandport/?switch=' + switch + '&port=' \
+          + port + '&regex=true&selected_page=1&items_per_page=100'
+    headers = {
+        'Accept': 'application/json',
+        'X-Access-Token': token
+    }
+    response = req.request("GET", url, headers=headers)
+    if response.status_code == 200:
+        responseData = response.json()
+        if len(responseData) > 0:
+                # and device['hostname'] in responseData[0]['path_ep2']['alias']:
+            result = {
+                'hostname_pywire': responseData[0]['path_ep2']['alias'].split('\n')[0],
+                'device_type': responseData[0]['path_ep2']['equipment_name'].split('\n')[0],
+                'rack': responseData[0]['path_ep2']['location'].split('\n')[0],
+                'rack_elevation': responseData[0]['path_ep2']['rack_elevation'].split('\n')[0],
+                'result': 'found'
+            }
+            return result
+        else:
+            return {}
+
+    else:
+        print(str(response.status_code) + ': ' + switch_port['switch'] + ' : ' + port)
+
+####################################################################
 #         api_template_data_from_device_with_auto_match
 ####################################################################
 def api_template_data_from_device_with_auto_match(device_name, token):
