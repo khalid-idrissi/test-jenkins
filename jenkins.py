@@ -74,8 +74,9 @@ if __name__ == '__main__':
     device = nb.dcim.devices.get(name='MTLMPXITC2004')
     print(device.id)
     print('end of the programm')
-
-    result = find_switch("MTLPREPPIMAW003", token)
-    print(result)
+    
     token_result = get_token(tpywire)
-    print(token_result)
+    result = find_switch("MTLPREPPIMAW003", token_result)
+    print(result)
+    
+    
