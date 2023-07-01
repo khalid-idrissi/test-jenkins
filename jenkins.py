@@ -73,3 +73,5 @@ if __name__ == '__main__':
 
     result = find_switch("MTLPREPPIMAW003", token)
     print(result)
+    token_result = get_token(tpywire)
+    print(token_result)
