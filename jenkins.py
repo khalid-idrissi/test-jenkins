@@ -186,6 +186,88 @@ def get_token(tokenpywire):
         raise SystemExit(err)
 
 ####################################################################
+#                  Get hostname's role
+####################################################################
+def get_device_role(pattern, roles):
+
+    role = None
+    for elem in roles:
+        accronym = elem.description.split(':')[1]
+        accronym = "".join(accronym.split())
+        if accronym in pattern:
+            role = elem
+            break
+    return role
+####################################################################
+#                      Update device Netbox
+####################################################################
+def update_device_netbox(dev, result, accronym, roles):
+
+    data_role_and_type_none = []
+    data_no_role = []
+    data_no_device_type = []
+    data_updated = []
+    data_found_not_match = []
+    data_not_found = []
+    data_alredy_updated = []
+    data_type_or_role_none = []
+    data_role_type_exists = []
+
+    if result != {}:
+        if dev.name in result['hostname_pywire']:  # the device name match with pywire
+            role = get_device_role(accronym, roles)
+            device_type = nb.dcim.device_types.get(slug=slugify(result['device_type']))
+            if role is None and device_type is None:
+                data_role_and_type_none.append(
+                    {'device': dev.name, 'type': result['device_type'], 'tenant': dev.tenant.name})
+            else:  # update the device in netbox
+                data = {}
+                data_type_or_role_none.append(dev.name)
+                if role is not None and device_type is not None:
+                    data_role_type_exists.append(dev.name)
+                    role_id = nb.dcim.device_roles.get(name=role).id
+                    if dev.device_role.id != role_id:
+                        data.update({'device_role': role_id})
+                        if dev.device_type.id != device_type.id:
+                            data.update({'device_type': device_type.id})
+                    if data != {}:
+                        # tag = nb.extras.tags.get(name='yaml_update')
+                        # new_tags = [tag] + dev.tags
+                        # data.update({'tags': new_tags})
+                        # dev.update(data)
+
+                        # to be deleted
+                        # tags = dev.tags
+                        # tag_ids = []
+                        # for tg in tags:
+                        #     tag_ids.append(tg.id)
+                        # tag_ids.append(tag)
+                        # data.update({'tags': tag_ids})
+                        # dev.update(data)
+                        # data_updated.append(result)
+                        # print(dev.name + ' is updated on Netbox')
+                        # print('-' * 50)
+                        data_updated.append(dev.name)
+                    else:
+                        # print(dev.name + 'is already update')
+                        data_alredy_updated.append(dev.name)
+                else:  # role or type is None
+                    if role is None:
+                        data_no_role.append({'device': dev.name, 'tenant': dev.tenant.name,
+                                             'type': device_type})
+                    elif device_type is None:
+                        data_no_device_type.append(
+                            {'device': dev.name, 'type': result['device_type'], 'tenant': dev.tenant.name,
+                             'role': role})
+        else:  # the device name doesn't match with pywire
+            data_found_not_match.append(result)
+    else:  # the device is not found
+        data_not_found.append(dev)
+
+    return data_role_and_type_none, data_no_role, data_no_device_type, data_updated, data_found_not_match, \
+           data_not_found, data_alredy_updated, data_type_or_role_none, data_role_type_exists
+           
+####################################################################
 #                      update generic devices
 ####################################################################
 def update_generic_devices(token):
@@ -226,159 +308,159 @@ def update_generic_devices(token):
 
     #token = get_token()
     for dev in devices:
-        # app1 = re.match(regexApp1, dev.name)
-        # app2 = re.match(regexApp2, dev.name)
-        # app3 = re.match(regexApp3, dev.name)
-        # bed = re.match(regexBpd, dev.name)
-        # emb = re.match(regexEmb, dev.name)
-        # swt = re.match(switchregex, dev.name)
+        app1 = re.match(regexApp1, dev.name)
+        app2 = re.match(regexApp2, dev.name)
+        app3 = re.match(regexApp3, dev.name)
+        bed = re.match(regexBpd, dev.name)
+        emb = re.match(regexEmb, dev.name)
+        swt = re.match(switchregex, dev.name)
 
         result = get_device_data_from_pywire(dev, token)
-        print(dev.name)
-        print(result)
-        print("*" * 50)
-        # if app1:  # Applications type 1
-            # match1_total.append(dev.name)
-            # data = update_device_netbox(dev, result, app1.group(1), roles_app)
-            # data_role_and_type_none.extend(data[0])
-            # data_no_role.extend(data[1])
-            # data_no_device_type.extend(data[2])
-            # data_updated.extend(data[3])
-            # data_found_not_match.extend(data[4])
-            # data_not_found.extend(data[5])
-            # data_alredy_updated.extend(data[6])
-            # data_type_or_role_none.extend(data[7])
-            # data_role_type_exists.extend(data[8])
+        # print(dev.name)
+        # print(result)
+        # print("*" * 50)
+        if app1:  # Applications type 1
+            match1_total.append(dev.name)
+            data = update_device_netbox(dev, result, app1.group(1), roles_app)
+            data_role_and_type_none.extend(data[0])
+            data_no_role.extend(data[1])
+            data_no_device_type.extend(data[2])
+            data_updated.extend(data[3])
+            data_found_not_match.extend(data[4])
+            data_not_found.extend(data[5])
+            data_alredy_updated.extend(data[6])
+            data_type_or_role_none.extend(data[7])
+            data_role_type_exists.extend(data[8])
 
-        # elif app2:  # Applications type 2
-            # match2_total.append(dev.name)
-            # data = update_device_netbox(dev, result, app2.group(1), roles_app)
-            # data_role_and_type_none.extend(data[0])
-            # data_no_role.extend(data[1])
-            # data_no_device_type.extend(data[2])
-            # data_updated.extend(data[3])
-            # data_found_not_match.extend(data[4])
-            # data_not_found.extend(data[5])
-            # data_alredy_updated.extend(data[6])
-            # data_type_or_role_none.extend(data[7])
-            # data_role_type_exists.extend(data[8])
+        elif app2:  # Applications type 2
+            match2_total.append(dev.name)
+            data = update_device_netbox(dev, result, app2.group(1), roles_app)
+            data_role_and_type_none.extend(data[0])
+            data_no_role.extend(data[1])
+            data_no_device_type.extend(data[2])
+            data_updated.extend(data[3])
+            data_found_not_match.extend(data[4])
+            data_not_found.extend(data[5])
+            data_alredy_updated.extend(data[6])
+            data_type_or_role_none.extend(data[7])
+            data_role_type_exists.extend(data[8])
 
-        # elif app3:  # Applications type 3
-            # match3_total.append(dev.name)
-            # data = update_device_netbox(dev, result, app3.group(1), roles_app)
-            # data_role_and_type_none.extend(data[0])
-            # data_no_role.extend(data[1])
-            # data_no_device_type.extend(data[2])
-            # data_updated.extend(data[3])
-            # data_found_not_match.extend(data[4])
-            # data_not_found.extend(data[5])
-            # data_alredy_updated.extend(data[6])
-            # data_type_or_role_none.extend(data[7])
-            # data_role_type_exists.extend(data[8])
+        elif app3:  # Applications type 3
+            match3_total.append(dev.name)
+            data = update_device_netbox(dev, result, app3.group(1), roles_app)
+            data_role_and_type_none.extend(data[0])
+            data_no_role.extend(data[1])
+            data_no_device_type.extend(data[2])
+            data_updated.extend(data[3])
+            data_found_not_match.extend(data[4])
+            data_not_found.extend(data[5])
+            data_alredy_updated.extend(data[6])
+            data_type_or_role_none.extend(data[7])
+            data_role_type_exists.extend(data[8])
 
-        # elif bed:  # Broadcast endpoint devices
-            # match4_total.append(dev.name)
-            # data = update_device_netbox(dev, result, bed.group(1), roles_bed)
-            # data_role_and_type_none.extend(data[0])
-            # data_no_role.extend(data[1])
-            # data_no_device_type.extend(data[2])
-            # data_updated.extend(data[3])
-            # data_found_not_match.extend(data[4])
-            # data_not_found.extend(data[5])
-            # data_alredy_updated.extend(data[6])
-            # data_type_or_role_none.extend(data[7])
-            # data_role_type_exists.extend(data[8])
+        elif bed:  # Broadcast endpoint devices
+            match4_total.append(dev.name)
+            data = update_device_netbox(dev, result, bed.group(1), roles_bed)
+            data_role_and_type_none.extend(data[0])
+            data_no_role.extend(data[1])
+            data_no_device_type.extend(data[2])
+            data_updated.extend(data[3])
+            data_found_not_match.extend(data[4])
+            data_not_found.extend(data[5])
+            data_alredy_updated.extend(data[6])
+            data_type_or_role_none.extend(data[7])
+            data_role_type_exists.extend(data[8])
 
-        # elif emb:  # Embrionix
-            # data_embrionix.append(dev)
-        # #     # update_tag = nb.extras.tags.get(name='yaml_update')
-        # #     # if update_tag not in dev.tags:
-        # #     #     new_tags = [update_tag] + dev.tags
-        # #     #     if int(dev.name.split('-')[1]) % 2 == 0:
-        # #     #         device_type = nb.dcim.device_types.get(slug='eb22hdrt-lm-0516')
-        # #     #     else:
-        # #     #         device_type = nb.dcim.device_types.get(slug='eb22hdrt-lm-0514')
-        # #     #     data = {
-        # #     #         'name': dev.name,
-        # #     #         'site': dev.site.id,
-        # #     #         'device_type': device_type.id,
-        # #     #         'device_role': nb.dcim.device_roles.get(name='Video Gateway').id,
-        # #     #         'tenant': dev.tenant.id,
-        # #     #         'tags': new_tags,
-        # #     #         'status': 'active'
-        # #     #     }
-        # #     #     dev.delete()
-        # #     #     new_device = nb.dcim.devices.create(data)
-        # #     #     if dev:
-        # #     #         print(f'{new_device.name} has been created')
-        # elif swt:
-            # data_switches.append(dev)
-        # else: # devices don't respect inames
-            # data_no_respect_inames.append(dev.name)
-            # data = update_device_netbox(dev, result, dev.name, roles_bed + roles_app)
-            # data_role_and_type_none.extend(data[0])
-            # data_no_role.extend(data[1])
-            # data_no_device_type.extend(data[2])
-            # data_updated.extend(data[3])
-            # data_found_not_match.extend(data[4])
-            # data_not_found.extend(data[5])
-            # data_alredy_updated.extend(data[6])
-            # data_type_or_role_none.extend(data[7])
-            # data_role_type_exists.extend(data[8])
+        elif emb:  # Embrionix
+            data_embrionix.append(dev)
+        #     # update_tag = nb.extras.tags.get(name='yaml_update')
+        #     # if update_tag not in dev.tags:
+        #     #     new_tags = [update_tag] + dev.tags
+        #     #     if int(dev.name.split('-')[1]) % 2 == 0:
+        #     #         device_type = nb.dcim.device_types.get(slug='eb22hdrt-lm-0516')
+        #     #     else:
+        #     #         device_type = nb.dcim.device_types.get(slug='eb22hdrt-lm-0514')
+        #     #     data = {
+        #     #         'name': dev.name,
+        #     #         'site': dev.site.id,
+        #     #         'device_type': device_type.id,
+        #     #         'device_role': nb.dcim.device_roles.get(name='Video Gateway').id,
+        #     #         'tenant': dev.tenant.id,
+        #     #         'tags': new_tags,
+        #     #         'status': 'active'
+        #     #     }
+        #     #     dev.delete()
+        #     #     new_device = nb.dcim.devices.create(data)
+        #     #     if dev:
+        #     #         print(f'{new_device.name} has been created')
+        elif swt:
+            data_switches.append(dev)
+        else: # devices don't respect inames
+            data_no_respect_inames.append(dev.name)
+            data = update_device_netbox(dev, result, dev.name, roles_bed + roles_app)
+            data_role_and_type_none.extend(data[0])
+            data_no_role.extend(data[1])
+            data_no_device_type.extend(data[2])
+            data_updated.extend(data[3])
+            data_found_not_match.extend(data[4])
+            data_not_found.extend(data[5])
+            data_alredy_updated.extend(data[6])
+            data_type_or_role_none.extend(data[7])
+            data_role_type_exists.extend(data[8])
 
-    # # write_to_csv_file(data_role_and_type_none, 'data_role_and_type_none', ['device','type', 'tenant'])
-    # # write_to_csv_file(data_no_device_type, 'data_no_device_type', ['device', 'tenant', 'type', 'role'])
-    # # write_to_csv_file(data_no_role, 'data_no_role', ['device', 'tenant', 'type'])
+    # write_to_csv_file(data_role_and_type_none, 'data_role_and_type_none', ['device','type', 'tenant'])
+    # write_to_csv_file(data_no_device_type, 'data_no_device_type', ['device', 'tenant', 'type', 'role'])
+    # write_to_csv_file(data_no_role, 'data_no_role', ['device', 'tenant', 'type'])
 
-    # print('------------------------------------------')
-    # print(f'match 1: {len(match1_total)}')
-    # print(match1_total)
-    # print('------------------------------------------')
-    # print(f'match 2: {len(match2_total)}')
-    # print(match2_total)
-    # print('------------------------------------------')
-    # print(f'match 3: {len(match3_total)}')
-    # print(match3_total)
-    # print('------------------------------------------')
-    # print(f'match 4: {len(match4_total)}')
-    # print(match4_total)
-    # print('------------------------------------------')
-    # print(f'data not found: {len(data_not_found)}')
-    # print(data_not_found)
-    # print('------------------------------------------')
-    # print(f'data_role_and_type_none: {len(data_role_and_type_none)}')
-    # print(data_role_and_type_none)
-    # print('------------------------------------------')
-    # print(f'data found not match: {len(data_found_not_match)}')
-    # print(data_found_not_match)
-    # print('------------------------------------------')
-    # print(f'data_updated: {len(data_updated)}')
-    # print(data_updated)
-    # print('------------------------------------------')
-    # print(f'data_no_respect_inames: {len(data_no_respect_inames)}')
-    # print(data_no_respect_inames)
-    # print('------------------------------------------')
-    # print(f'data switches {len(data_switches)}')
-    # print(data_switches)
-    # print('------------------------------------------')
-    # print(f'data_embrionix {len(data_embrionix)}')
-    # print(data_embrionix)
-    # print('------------------------------------------')
-    # print(f'data_no_device_type {len(data_no_device_type)}')
-    # print(data_no_device_type)
-    # print('------------------------------------------')
-    # print(f'data_no_role {len(data_no_role)}')
-    # print(data_no_role)
-    # print('------------------------------------------')
-    # print(f'data_alredy_updated {len(data_alredy_updated)}')
-    # print(data_alredy_updated)
-    # print('------------------------------------------')
-    # print(f'data_type_or_role_none {len(data_type_or_role_none)}')
-    # print(data_type_or_role_none)
-    # print('------------------------------------------')
-    # print(f'data_role_type_exists {len(data_role_type_exists)}')
-    # print(data_role_type_exists)
-    # print('------------------------------------------')
+    print('------------------------------------------')
+    print(f'match 1: {len(match1_total)}')
+    print(match1_total)
+    print('------------------------------------------')
+    print(f'match 2: {len(match2_total)}')
+    print(match2_total)
+    print('------------------------------------------')
+    print(f'match 3: {len(match3_total)}')
+    print(match3_total)
+    print('------------------------------------------')
+    print(f'match 4: {len(match4_total)}')
+    print(match4_total)
+    print('------------------------------------------')
+    print(f'data not found: {len(data_not_found)}')
+    print(data_not_found)
+    print('------------------------------------------')
+    print(f'data_role_and_type_none: {len(data_role_and_type_none)}')
+    print(data_role_and_type_none)
+    print('------------------------------------------')
+    print(f'data found not match: {len(data_found_not_match)}')
+    print(data_found_not_match)
+    print('------------------------------------------')
+    print(f'data_updated: {len(data_updated)}')
+    print(data_updated)
+    print('------------------------------------------')
+    print(f'data_no_respect_inames: {len(data_no_respect_inames)}')
+    print(data_no_respect_inames)
+    print('------------------------------------------')
+    print(f'data switches {len(data_switches)}')
+    print(data_switches)
+    print('------------------------------------------')
+    print(f'data_embrionix {len(data_embrionix)}')
+    print(data_embrionix)
+    print('------------------------------------------')
+    print(f'data_no_device_type {len(data_no_device_type)}')
+    print(data_no_device_type)
+    print('------------------------------------------')
+    print(f'data_no_role {len(data_no_role)}')
+    print(data_no_role)
+    print('------------------------------------------')
+    print(f'data_alredy_updated {len(data_alredy_updated)}')
+    print(data_alredy_updated)
+    print('------------------------------------------')
+    print(f'data_type_or_role_none {len(data_type_or_role_none)}')
+    print(data_type_or_role_none)
+    print('------------------------------------------')
+    print(f'data_role_type_exists {len(data_role_type_exists)}')
+    print(data_role_type_exists)
+    print('------------------------------------------')
 
     # type_counts = {}
     # for item in data_no_device_type:
