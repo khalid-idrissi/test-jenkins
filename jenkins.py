@@ -6,12 +6,10 @@ import requests as req
 # Access environment variables
 tnetbox = sys.argv[1]
 tpywire = sys.argv[2]
-token = sys.argv[3]
 
 #print parameters
 print(tnetbox)
 print(tpywire)
-print(token)
 
 ####################################################################
 #                      Match device name
@@ -76,7 +74,7 @@ if __name__ == '__main__':
     print('end of the programm')
     
     token_result = get_token(tpywire)
-    result = find_switch("MTLPREPPIMAW003", token_result)
+    result = find_switch("MTLPREPPIMAW004", token_result)
     print(result)
     
     
