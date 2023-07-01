@@ -19,6 +19,74 @@ nb = pynetbox.api(
         )
 nb.http_session.verify = False
 
+
+####################################################################
+#         api_template_data_from_device_with_auto_match
+####################################################################
+def api_template_data_from_device_with_auto_match(device_name, token):
+
+    url = f"https://pywire-app.cbc-rc.ca/api/v2/template_data_from_device_with_auto_match/?device_name={device_name}"
+    headers = {
+        'Accept': 'application/json',
+        'X-Access-Token': token
+    }
+    try:
+        response = req.request("GET", url, headers=headers)
+        response.raise_for_status()  # raise exception if status code is not 200
+        response_data = response.json()
+        if not response_data:
+            # No match found
+            return {}
+        elif len(response_data.get('all_results', [])) >= 1 and device_name in response_data['result']:
+            device_info = response_data['device_infos']
+            template_info = response_data['template_infos']
+            is_match = 'match' if len(response_data.get('all_results', [])) == 1 else 'not match'
+            return {
+                'hostname_pywire': response_data['result'],
+                'device_name': device_name,
+                'rack': device_info.get('location', 'none'),
+                'rack_elevation': device_info.get('elevation', 'none'),
+                'device_type': template_info.get('equipment_name', 'none'),
+                'manufacturer': template_info.get('manufacturer', 'none'),
+                'match': is_match
+            }
+        else:
+            # the device name not match with API's propositions
+            return {}
+    except req.exceptions.HTTPError as e:
+        raise Exception(f"HTTP Error {e.response.status_code}: {e.response.text}") from e
+    except Exception as e:
+        raise Exception(f"Error retrieving device data from Pywire API: {e}") from e
+
+
+####################################################################
+#                      get_device_data_from_pywire
+####################################################################
+def get_device_data_from_pywire(dev, token):
+
+    result = api_template_data_from_device_with_auto_match(dev.name, token)
+
+    if result != {}:
+        return result
+    else:
+        device = nb.dcim.devices.get(name=dev.name)
+        interfaces = nb.dcim.interfaces.filter(device_id=device.id)
+        if len(interfaces) == 0:
+            return {}
+        else:
+            for interface in interfaces:
+                if interface.connected_endpoints is None:
+                    result = {}
+                else:
+                    switch_and_port = {'switch': interface.connected_endpoints[0].device.name,
+                                       'port': interface.connected_endpoints[0].name.split('Ethernet')[1]}
+
+                    result = api_trace_path_byswitch_and_port(switch_and_port, token)
+                    if result != {} and dev.name in result['hostname_pywire']:
+                        result.update({'device_name': dev.name, "switch": switch_and_port['switch'], 'port': switch_and_port['port']})
+                        return result
+
+            return result
 ####################################################################
 #                      Match device name
 ####################################################################
