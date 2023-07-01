@@ -9,6 +9,7 @@ pipeline {
             steps {
 				echo "Intsall Packages"
 				bat 'pip install requests'
+				bat 'pip install slugify'
             }
         }
         stage('Test') {

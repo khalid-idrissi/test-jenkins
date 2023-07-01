@@ -4,6 +4,7 @@ import json
 import re
 import requests as req
 import urllib3
+from slugify import slugify
 
 urllib3.disable_warnings()
 
