@@ -217,6 +217,10 @@ def update_device_netbox(dev, result, accronym, roles):
     if result != {}:
         if dev.name in result['hostname_pywire']:  # the device name match with pywire
             role = get_device_role(accronym, roles)
+            mydevice = result['device_type']
+            print(mydevice)
+            myslug = slugify(result['device_type'])
+            print(myslug)
             device_type = nb.dcim.device_types.get(slug=slugify(result['device_type']))
             if role is None and device_type is None:
                 data_role_and_type_none.append(
