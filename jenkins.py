@@ -48,8 +48,9 @@ def get_token(tokenpywire):
     url_prod = 'https://pywire-app.cbc-rc.ca/api/v2/get_token/'
     headers = {
         'Accept': 'application/json',
-        'Authorization': 'Basic tokenpywire'
+        'Authorization': 'Basic' + tokenpywire
     }
+    print('Basic' + tokenpywire)
     try:
         response = req.request("GET", url_prod, headers=headers)
         responseData = response.json()
@@ -59,6 +60,9 @@ def get_token(tokenpywire):
     except req.exceptions.HTTPError as err:
         raise SystemExit(err)
 
+####################################################################
+#                     Main
+####################################################################
 
 if __name__ == '__main__':
 
