@@ -48,7 +48,7 @@ def get_token(tokenpywire):
     url_prod = 'https://pywire-app.cbc-rc.ca/api/v2/get_token/'
     headers = {
         'Accept': 'application/json',
-        'Authorization': 'Basic' + tokenpywire
+        'Authorization': 'Basic ' + tokenpywire
     }
     print('Basic' + tokenpywire)
     try:
