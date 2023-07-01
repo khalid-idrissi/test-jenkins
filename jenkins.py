@@ -70,5 +70,5 @@ if __name__ == '__main__':
     print(device.id)
     print('end of the programm')
 
-    result = find_switch("MTLPREPPIMAW003", token)
-    print(result)
+    #result = find_switch("MTLPREPPIMAW003", token)
+    #print(result)
