@@ -3,6 +3,9 @@ import pynetbox
 import json
 import re
 import requests as req
+import urllib3
+
+urllib3.disable_warnings()
 
 # Access environment variables
 tnetbox = sys.argv[1]
@@ -233,6 +236,7 @@ def update_generic_devices(token):
         swt = re.match(switchregex, dev.name)
 
         result = get_device_data_from_pywire(dev, token)
+        print(dev.name)
         print(result)
         # if app1:  # Applications type 1
             # match1_total.append(dev.name)
