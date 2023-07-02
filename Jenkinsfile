@@ -3,6 +3,7 @@ pipeline {
     environment {
 		netboxtoken = credentials('netboxtoken')
 		tokenpywire = credentials('tokenpywire')
+		tokenatlassian = credentials('atlassiantoken')
     }
     stages {
         stage('Intsall Packages') {
@@ -23,7 +24,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'testing'
-                bat "python jenkins.py ${netboxtoken} ${tokenpywire}"
+                bat "python jenkins.py ${netboxtoken} ${tokenpywire} ${tokenatlassian}"
 
             }
         }
