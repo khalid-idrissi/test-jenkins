@@ -14,9 +14,6 @@ tnetbox = sys.argv[1]
 tpywire = sys.argv[2]
 atlassiantoken = sys.argv[3]
 
-# tnetbox = '048bf3943797d831c88f95c4faef8ae3b3d9b084'
-# tpywire = 'SWRyaXNzaUs6UVdBU3h1MDFleDUy'
-
 #print parameters
 print(tnetbox)
 print(tpywire)
