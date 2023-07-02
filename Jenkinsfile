@@ -9,18 +9,8 @@ pipeline {
         stage('Intsall Packages') {
             steps {
 				echo "Intsall Packages"
-				bat 'pip install requests'
-				bat 'pip install slugify'
             }
         }
-		stage('Get Python Version'){
-			steps {
-                script {
-                    def pythonVersion = bat(script: 'python --version', returnStdout: true).trim()
-                    echo "Python version: ${pythonVersion}"
-                }
-            }
-		}
         stage('Test') {
             steps {
                 echo 'testing'
