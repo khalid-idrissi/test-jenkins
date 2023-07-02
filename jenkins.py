@@ -495,26 +495,9 @@ def update_conflence_page(total_devices, total_devices_updated, total_embrionix,
 
 if __name__ == '__main__':
 
-    # token_result = get_token(tpywire)
-    # update_generic_devices(token_result)
-    username = 'khalid.hafdi.idrissi@radio-canada.ca'
-    password = atlassiantoken
-    confluence = Confluence(
-        url='https://cbcradiocanada.atlassian.net/',
-        username=username,
-        password=password,
-        cloud=True)
-    auth = (username, password)
-    base_url = 'https://cbcradiocanada.atlassian.net/wiki/'
-    url = f'{base_url}/rest/api/content/3765764149?expand=body.storage'
-    response = req.get(url, auth=auth)
-    # print(response.content)
-    if response.status_code == 200:
-        # Retrieve the content from the response
-        content = response.json()['body']['storage']['value']
-        print(content)
-    else:
-        print(f"Failed to retrieve page content. Status code: {response.status_code}")
+    token_result = get_token(tpywire)
+    update_generic_devices(token_result)
+    
    
 
     
