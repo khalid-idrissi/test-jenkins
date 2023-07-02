@@ -303,7 +303,6 @@ def update_generic_devices(token):
     match4_total = []
 
     devices = nb.dcim.devices.filter(tag='yaml-migration')
-    # devices = nb.dcim.devices.filter(name='MTLMPXCAM008')
     print(len(devices))
     regexApp1   = "^[A-Za-z]{3}[A-Za-z]{3}[PNL][PBVC][WLUCEO]([A-Za-z]{3})\d{2}$"  # APPS
     regexApp2   = "^[A-Za-z]{3}[A-Za-z]{3}[PNL][PBVC]([A-Za-z]{3})\d{3}$"  # APPS
@@ -312,7 +311,6 @@ def update_generic_devices(token):
     regexEmb    = "^[A-Za-z-0-9]+[E|X]LF\d{3}-(\d{2})$"  # embrionix
     switchregex = r"MTL-\w{4}-[a-zA-Z]{3}-\w+"
 
-    #token = get_token()
     for dev in devices:
         app1 = re.match(regexApp1, dev.name)
         app2 = re.match(regexApp2, dev.name)
@@ -322,9 +320,6 @@ def update_generic_devices(token):
         swt = re.match(switchregex, dev.name)
 
         result = get_device_data_from_pywire(dev, token)
-        # print(dev.name)
-        # print(result)
-        # print("*" * 50)
         if app1:  # Applications type 1
             match1_total.append(dev.name)
             data = update_device_netbox(dev, result, app1.group(1), roles_app)
