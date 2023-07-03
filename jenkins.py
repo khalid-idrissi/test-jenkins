@@ -202,12 +202,12 @@ def update_device_netbox(dev, result, accronym, roles):
                     if dev.device_type.id != device_type.id:
                         data.update({'device_type': device_type.id})
                     if data != {}:
-                        # tag = nb.extras.tags.get(name='yaml_update')
-                        # new_tags = [tag] + dev.tags
-                        # data.update({'tags': new_tags})
-                        # dev.update(data)
-                        # print(dev.name + ' is updated on Netbox')
-                        # print('-' * 50)
+                        tag = nb.extras.tags.get(name='yaml_update')
+                        new_tags = [tag] + dev.tags
+                        data.update({'tags': new_tags})
+                        dev.update(data)
+                        print(dev.name + ' is updated on Netbox')
+                        print('-' * 50)
                         data_updated.append(dev.name)
                     else:
                         # print(dev.name + 'is already update')
