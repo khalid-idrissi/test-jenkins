@@ -192,30 +192,20 @@ def update_device_netbox(dev, result, accronym, roles):
                 data_role_and_type_none.append(
                     {'device': dev.name, 'type': result['device_type'], 'tenant': dev.tenant.name})
             else:  # update the device in netbox
-                data = {}
                 data_type_or_role_none.append(dev.name)
                 if role is not None and device_type is not None:
+                    data = {}
                     data_role_type_exists.append(dev.name)
                     role_id = nb.dcim.device_roles.get(name=role).id
                     if dev.device_role.id != role_id:
                         data.update({'device_role': role_id})
-                        if dev.device_type.id != device_type.id:
-                            data.update({'device_type': device_type.id})
+                    if dev.device_type.id != device_type.id:
+                        data.update({'device_type': device_type.id})
                     if data != {}:
                         # tag = nb.extras.tags.get(name='yaml_update')
                         # new_tags = [tag] + dev.tags
                         # data.update({'tags': new_tags})
                         # dev.update(data)
-
-                        # to be deleted
-                        # tags = dev.tags
-                        # tag_ids = []
-                        # for tg in tags:
-                        #     tag_ids.append(tg.id)
-                        # tag_ids.append(tag)
-                        # data.update({'tags': tag_ids})
-                        # dev.update(data)
-                        # data_updated.append(result)
                         # print(dev.name + ' is updated on Netbox')
                         # print('-' * 50)
                         data_updated.append(dev.name)
