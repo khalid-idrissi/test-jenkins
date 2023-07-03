@@ -252,10 +252,10 @@ def update_generic_devices(token):
     data_no_respect_inames = []
     data_switches = []
     data_embrionix = []
-    match1_total = []
-    match2_total = []
-    match3_total = []
-    match4_total = []
+    app1_total = []
+    app2_total = []
+    app3_total = []
+    bed_total = []
 
     devices = nb.dcim.devices.filter(tag='yaml-migration')
     print(len(devices))
@@ -276,7 +276,7 @@ def update_generic_devices(token):
 
         result = get_device_data_from_pywire(dev, token)
         if app1:  # Applications type 1
-            match1_total.append(dev.name)
+            app1_total.append(dev.name)
             data = update_device_netbox(dev, result, app1.group(1), roles_app)
             data_role_and_type_none.extend(data[0])
             data_no_role.extend(data[1])
@@ -289,7 +289,7 @@ def update_generic_devices(token):
             data_role_type_exists.extend(data[8])
 
         elif app2:  # Applications type 2
-            match2_total.append(dev.name)
+            app2_total.append(dev.name)
             data = update_device_netbox(dev, result, app2.group(1), roles_app)
             data_role_and_type_none.extend(data[0])
             data_no_role.extend(data[1])
@@ -302,7 +302,7 @@ def update_generic_devices(token):
             data_role_type_exists.extend(data[8])
 
         elif app3:  # Applications type 3
-            match3_total.append(dev.name)
+            app3_total.append(dev.name)
             data = update_device_netbox(dev, result, app3.group(1), roles_app)
             data_role_and_type_none.extend(data[0])
             data_no_role.extend(data[1])
@@ -315,7 +315,7 @@ def update_generic_devices(token):
             data_role_type_exists.extend(data[8])
 
         elif bed:  # Broadcast endpoint devices
-            match4_total.append(dev.name)
+            bed_total.append(dev.name)
             data = update_device_netbox(dev, result, bed.group(1), roles_bed)
             data_role_and_type_none.extend(data[0])
             data_no_role.extend(data[1])
@@ -369,53 +369,53 @@ def update_generic_devices(token):
     # write_to_csv_file(data_no_role, 'data_no_role', ['device', 'tenant', 'type'])
 
     print('------------------------------------------')
-    print(f'match 1: {len(match1_total)}')
-    print(match1_total)
+    print(f'application 1: {len(app1_total)}')
+    # print(app1_total)
     print('------------------------------------------')
-    print(f'match 2: {len(match2_total)}')
-    print(match2_total)
+    print(f'application 2: {len(app2_total)}')
+    # print(app2_total)
     print('------------------------------------------')
-    print(f'match 3: {len(match3_total)}')
-    print(match3_total)
+    print(f'application 3: {len(app3_total)}')
+    # print(app3_total)
     print('------------------------------------------')
-    print(f'match 4: {len(match4_total)}')
-    print(match4_total)
+    print(f'broadcast endpoint devices: {len(bed_total)}')
+    # print(bed_total)
+    print('------------------------------------------')
+    print(f'data switches {len(data_switches)}')
+    # print(data_switches)
+    print('------------------------------------------')
+    print(f'data_embrionix {len(data_embrionix)}')
+    # print(data_embrionix)
+    print('------------------------------------------')
+    print(f'data_no_respect_inames: {len(data_no_respect_inames)}')
+    # print(data_no_respect_inames)
     print('------------------------------------------')
     print(f'data not found: {len(data_not_found)}')
-    print(data_not_found)
-    print('------------------------------------------')
-    print(f'data_role_and_type_none: {len(data_role_and_type_none)}')
-    print(data_role_and_type_none)
+    # print(data_not_found)
     print('------------------------------------------')
     print(f'data found not match: {len(data_found_not_match)}')
-    print(data_found_not_match)
+    # print(data_found_not_match)
+    print('------------------------------------------')
+    print(f'data_role_and_type_none: {len(data_role_and_type_none)}')
+    # print(data_role_and_type_none)
+    print('------------------------------------------')
+    print(f'data_type_or_role_none {len(data_type_or_role_none)}')
+    # print(data_type_or_role_none)
+    print('------------------------------------------')
+    print(f'data_role_type_exists {len(data_role_type_exists)}')
+    # print(data_role_type_exists)
+    print('------------------------------------------')
+    print(f'data_alredy_updated {len(data_alredy_updated)}')
+    # print(data_alredy_updated)
     print('------------------------------------------')
     print(f'data_updated: {len(data_updated)}')
     print(data_updated)
     print('------------------------------------------')
-    print(f'data_no_respect_inames: {len(data_no_respect_inames)}')
-    print(data_no_respect_inames)
-    print('------------------------------------------')
-    print(f'data switches {len(data_switches)}')
-    print(data_switches)
-    print('------------------------------------------')
-    print(f'data_embrionix {len(data_embrionix)}')
-    print(data_embrionix)
-    print('------------------------------------------')
     print(f'data_no_device_type {len(data_no_device_type)}')
-    print(data_no_device_type)
+    # print(data_no_device_type)
     print('------------------------------------------')
     print(f'data_no_role {len(data_no_role)}')
-    print(data_no_role)
-    print('------------------------------------------')
-    print(f'data_alredy_updated {len(data_alredy_updated)}')
-    print(data_alredy_updated)
-    print('------------------------------------------')
-    print(f'data_type_or_role_none {len(data_type_or_role_none)}')
-    print(data_type_or_role_none)
-    print('------------------------------------------')
-    print(f'data_role_type_exists {len(data_role_type_exists)}')
-    print(data_role_type_exists)
+    # print(data_no_role)
     print('------------------------------------------')
 
     type_counts = {}
@@ -445,8 +445,8 @@ def update_generic_devices(token):
             ip_pres_updated.append(dev)
         elif dev.tenant.name == 'Media Production':
             ip_prod_updated.append(dev)
-    total_applications = len(match1_total) + len(match2_total) + len(match3_total)
-    update_conflence_page(total_devices, len(total_updated), len(data_embrionix), len(data_not_found), len(data_role_and_type_none), len(data_no_device_type), len(data_no_role), len(data_found_not_match),top_10_items, len(ip_pres_updated), len(ip_prod_updated), total_applications, len(data_switches), len(match4_total), len(data_updated), len(data_role_type_exists), len(data_no_respect_inames))
+    total_applications = len(app1_total) + len(app2_total) + len(app3_total)
+    update_conflence_page(total_devices, len(total_updated), len(data_embrionix), len(data_not_found), len(data_role_and_type_none), len(data_no_device_type), len(data_no_role), len(data_found_not_match),top_10_items, len(ip_pres_updated), len(ip_prod_updated), total_applications, len(data_switches), len(bed_total), len(data_updated), len(data_role_type_exists), len(data_no_respect_inames))
 
 ####################################################################
 #                     Update Confluence page
