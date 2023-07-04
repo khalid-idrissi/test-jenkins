@@ -257,7 +257,8 @@ def update_generic_devices(token):
     app3_total = []
     bed_total = []
 
-    devices = nb.dcim.devices.filter(tag='yaml-migration')
+    # devices = nb.dcim.devices.filter(tag='yaml-migration')
+    devices = nb.dcim.devices.filter(name='CET1MPXELF249-18')
     print(len(devices))
     regexApp1   = "^[A-Za-z]{3}[A-Za-z]{3}[PNL][PBVC][WLUCEO]([A-Za-z]{3})\d{2}$"  # APPS
     regexApp2   = "^[A-Za-z]{3}[A-Za-z]{3}[PNL][PBVC]([A-Za-z]{3})\d{3}$"  # APPS
@@ -329,26 +330,28 @@ def update_generic_devices(token):
 
         elif emb:  # Embrionix
             data_embrionix.append(dev)
-        #     # update_tag = nb.extras.tags.get(name='yaml_update')
-        #     # if update_tag not in dev.tags:
-        #     #     new_tags = [update_tag] + dev.tags
-        #     #     if int(dev.name.split('-')[1]) % 2 == 0:
-        #     #         device_type = nb.dcim.device_types.get(slug='eb22hdrt-lm-0516')
-        #     #     else:
-        #     #         device_type = nb.dcim.device_types.get(slug='eb22hdrt-lm-0514')
-        #     #     data = {
-        #     #         'name': dev.name,
-        #     #         'site': dev.site.id,
-        #     #         'device_type': device_type.id,
-        #     #         'device_role': nb.dcim.device_roles.get(name='Video Gateway').id,
-        #     #         'tenant': dev.tenant.id,
-        #     #         'tags': new_tags,
-        #     #         'status': 'active'
-        #     #     }
-        #     #     dev.delete()
-        #     #     new_device = nb.dcim.devices.create(data)
-        #     #     if dev:
-        #     #         print(f'{new_device.name} has been created')
+            update_tag = nb.extras.tags.get(name='yaml_update')
+            if update_tag not in dev.tags:
+                new_tags = [update_tag] + dev.tags
+                if int(dev.name.split('-')[1]) % 2 == 0:
+                    device_type = nb.dcim.device_types.get(slug='eb22hdrt-lm-0516')
+                else:
+                    device_type = nb.dcim.device_types.get(slug='eb22hdrt-lm-0514')
+                data = {
+                    'name': dev.name,
+                    'site': dev.site.id,
+                    'device_type': device_type.id,
+                    'device_role': nb.dcim.device_roles.get(name='Video Gateway').id,
+                    'tenant': dev.tenant.id,
+                    'tags': new_tags,
+                    'status': 'active'
+                }
+                dev.delete()
+                new_device = nb.dcim.devices.create(data)
+                if dev:
+                    print(f'{new_device.name} has been created')
+            else:
+                print(f'{dev.name} already updated'
         elif swt:
             data_switches.append(dev)
         else: # devices don't respect inames
@@ -467,7 +470,7 @@ def update_conflence_page(total_devices, total_devices_updated, total_embrionix,
     if response.status_code == 200:
         # Retrieve the content from the response
         content = response.json()['body']['storage']['value']
-        print(content)
+        # print(content)
     else:
         print(f"Failed to retrieve page content. Status code: {response.status_code}")
 
