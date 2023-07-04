@@ -257,8 +257,8 @@ def update_generic_devices(token):
     app3_total = []
     bed_total = []
 
-    # devices = nb.dcim.devices.filter(tag='yaml-migration')
-    devices = nb.dcim.devices.filter(name='CET1MPXELF249-18')
+    devices = nb.dcim.devices.filter(tag='yaml-migration')
+    # devices = nb.dcim.devices.filter(name='CET1MPXELF249-18')
     print(len(devices))
     regexApp1   = "^[A-Za-z]{3}[A-Za-z]{3}[PNL][PBVC][WLUCEO]([A-Za-z]{3})\d{2}$"  # APPS
     regexApp2   = "^[A-Za-z]{3}[A-Za-z]{3}[PNL][PBVC]([A-Za-z]{3})\d{3}$"  # APPS
