@@ -330,13 +330,13 @@ def update_generic_devices(token):
 
         elif emb:  # Embrionix
             data_embrionix.append(dev)
-            # update_tag = nb.extras.tags.get(name='yaml_update')
-            # if update_tag not in dev.tags:
-                # new_tags = [update_tag] + dev.tags
-                # if int(dev.name.split('-')[1]) % 2 == 0:
-                    # device_type = nb.dcim.device_types.get(slug='eb22hdrt-lm-0516')
-                # else:
-                    # device_type = nb.dcim.device_types.get(slug='eb22hdrt-lm-0514')
+            update_tag = nb.extras.tags.get(name='yaml_update')
+            if update_tag not in dev.tags:
+                new_tags = [update_tag] + dev.tags
+                if int(dev.name.split('-')[1]) % 2 == 0:
+                    device_type = nb.dcim.device_types.get(slug='eb22hdrt-lm-0516')
+                else:
+                    device_type = nb.dcim.device_types.get(slug='eb22hdrt-lm-0514')
                 # data = {
                     # 'name': dev.name,
                     # 'site': dev.site.id,
@@ -350,8 +350,10 @@ def update_generic_devices(token):
                 # new_device = nb.dcim.devices.create(data)
                 # if dev:
                     # print(f'{new_device.name} has been created')
+            else:
+                print(f'{dev.name} is a new device in netbox')
 
-        if swt:
+        elif swt:
             data_switches.append(dev)
         else: # devices don't respect inames
             data_no_respect_inames.append(dev.name)
