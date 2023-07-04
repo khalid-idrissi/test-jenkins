@@ -328,28 +328,28 @@ def update_generic_devices(token):
             data_type_or_role_none.extend(data[7])
             data_role_type_exists.extend(data[8])
 
-        elif emb:  # Embrionix
-            data_embrionix.append(dev)
-            update_tag = nb.extras.tags.get(name='yaml_update')
-            if update_tag not in dev.tags:
-                new_tags = [update_tag] + dev.tags
-                if int(dev.name.split('-')[1]) % 2 == 0:
-                    device_type = nb.dcim.device_types.get(slug='eb22hdrt-lm-0516')
-                else:
-                    device_type = nb.dcim.device_types.get(slug='eb22hdrt-lm-0514')
-                data = {
-                    'name': dev.name,
-                    'site': dev.site.id,
-                    'device_type': device_type.id,
-                    'device_role': nb.dcim.device_roles.get(name='Video Gateway').id,
-                    'tenant': dev.tenant.id,
-                    'tags': new_tags,
-                    'status': 'active'
-                }
-                dev.delete()
-                new_device = nb.dcim.devices.create(data)
-                if dev:
-                    print(f'{new_device.name} has been created')
+        # elif emb:  # Embrionix
+            # data_embrionix.append(dev)
+            # update_tag = nb.extras.tags.get(name='yaml_update')
+            # if update_tag not in dev.tags:
+                # new_tags = [update_tag] + dev.tags
+                # if int(dev.name.split('-')[1]) % 2 == 0:
+                    # device_type = nb.dcim.device_types.get(slug='eb22hdrt-lm-0516')
+                # else:
+                    # device_type = nb.dcim.device_types.get(slug='eb22hdrt-lm-0514')
+                # data = {
+                    # 'name': dev.name,
+                    # 'site': dev.site.id,
+                    # 'device_type': device_type.id,
+                    # 'device_role': nb.dcim.device_roles.get(name='Video Gateway').id,
+                    # 'tenant': dev.tenant.id,
+                    # 'tags': new_tags,
+                    # 'status': 'active'
+                # }
+                # dev.delete()
+                # new_device = nb.dcim.devices.create(data)
+                # if dev:
+                    # print(f'{new_device.name} has been created')
 
         # elif swt:
             # data_switches.append(dev)
