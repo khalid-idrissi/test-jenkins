@@ -276,8 +276,8 @@ def update_generic_devices(token):
         swt = re.match(switchregex, dev.name)
 
         result = get_device_data_from_pywire(dev, token)
-        # if app1:  # Applications type 1
-            # app1_total.append(dev.name)
+        if app1:  # Applications type 1
+            app1_total.append(dev.name)
             # data = update_device_netbox(dev, result, app1.group(1), roles_app)
             # data_role_and_type_none.extend(data[0])
             # data_no_role.extend(data[1])
@@ -289,8 +289,8 @@ def update_generic_devices(token):
             # data_type_or_role_none.extend(data[7])
             # data_role_type_exists.extend(data[8])
 
-        # elif app2:  # Applications type 2
-            # app2_total.append(dev.name)
+        elif app2:  # Applications type 2
+            app2_total.append(dev.name)
             # data = update_device_netbox(dev, result, app2.group(1), roles_app)
             # data_role_and_type_none.extend(data[0])
             # data_no_role.extend(data[1])
@@ -302,8 +302,8 @@ def update_generic_devices(token):
             # data_type_or_role_none.extend(data[7])
             # data_role_type_exists.extend(data[8])
 
-        # elif app3:  # Applications type 3
-            # app3_total.append(dev.name)
+        elif app3:  # Applications type 3
+            app3_total.append(dev.name)
             # data = update_device_netbox(dev, result, app3.group(1), roles_app)
             # data_role_and_type_none.extend(data[0])
             # data_no_role.extend(data[1])
@@ -315,8 +315,8 @@ def update_generic_devices(token):
             # data_type_or_role_none.extend(data[7])
             # data_role_type_exists.extend(data[8])
 
-        # elif bed:  # Broadcast endpoint devices
-            # bed_total.append(dev.name)
+        elif bed:  # Broadcast endpoint devices
+            bed_total.append(dev.name)
             # data = update_device_netbox(dev, result, bed.group(1), roles_bed)
             # data_role_and_type_none.extend(data[0])
             # data_no_role.extend(data[1])
@@ -328,8 +328,8 @@ def update_generic_devices(token):
             # data_type_or_role_none.extend(data[7])
             # data_role_type_exists.extend(data[8])
 
-        # elif emb:  # Embrionix
-            # data_embrionix.append(dev)
+        elif emb:  # Embrionix
+            data_embrionix.append(dev)
             # update_tag = nb.extras.tags.get(name='yaml_update')
             # if update_tag not in dev.tags:
                 # new_tags = [update_tag] + dev.tags
