@@ -315,18 +315,18 @@ def update_generic_devices(token):
             # data_type_or_role_none.extend(data[7])
             # data_role_type_exists.extend(data[8])
 
-        if bed:  # Broadcast endpoint devices
-            bed_total.append(dev.name)
-            data = update_device_netbox(dev, result, bed.group(1), roles_bed)
-            data_role_and_type_none.extend(data[0])
-            data_no_role.extend(data[1])
-            data_no_device_type.extend(data[2])
-            data_updated.extend(data[3])
-            data_found_not_match.extend(data[4])
-            data_not_found.extend(data[5])
-            data_alredy_updated.extend(data[6])
-            data_type_or_role_none.extend(data[7])
-            data_role_type_exists.extend(data[8])
+        # elif bed:  # Broadcast endpoint devices
+            # bed_total.append(dev.name)
+            # data = update_device_netbox(dev, result, bed.group(1), roles_bed)
+            # data_role_and_type_none.extend(data[0])
+            # data_no_role.extend(data[1])
+            # data_no_device_type.extend(data[2])
+            # data_updated.extend(data[3])
+            # data_found_not_match.extend(data[4])
+            # data_not_found.extend(data[5])
+            # data_alredy_updated.extend(data[6])
+            # data_type_or_role_none.extend(data[7])
+            # data_role_type_exists.extend(data[8])
 
         # elif emb:  # Embrionix
             # data_embrionix.append(dev)
@@ -351,20 +351,20 @@ def update_generic_devices(token):
                 # if dev:
                     # print(f'{new_device.name} has been created')
 
-        # elif swt:
-            # data_switches.append(dev)
-        # else: # devices don't respect inames
-            # data_no_respect_inames.append(dev.name)
-            # data = update_device_netbox(dev, result, dev.name, roles_bed + roles_app)
-            # data_role_and_type_none.extend(data[0])
-            # data_no_role.extend(data[1])
-            # data_no_device_type.extend(data[2])
-            # data_updated.extend(data[3])
-            # data_found_not_match.extend(data[4])
-            # data_not_found.extend(data[5])
-            # data_alredy_updated.extend(data[6])
-            # data_type_or_role_none.extend(data[7])
-            # data_role_type_exists.extend(data[8])
+        if swt:
+            data_switches.append(dev)
+        else: # devices don't respect inames
+            data_no_respect_inames.append(dev.name)
+            data = update_device_netbox(dev, result, dev.name, roles_bed + roles_app)
+            data_role_and_type_none.extend(data[0])
+            data_no_role.extend(data[1])
+            data_no_device_type.extend(data[2])
+            data_updated.extend(data[3])
+            data_found_not_match.extend(data[4])
+            data_not_found.extend(data[5])
+            data_alredy_updated.extend(data[6])
+            data_type_or_role_none.extend(data[7])
+            data_role_type_exists.extend(data[8])
 
     # write_to_csv_file(data_role_and_type_none, 'data_role_and_type_none', ['device','type', 'tenant'])
     # write_to_csv_file(data_no_device_type, 'data_no_device_type', ['device', 'tenant', 'type', 'role'])
@@ -390,7 +390,7 @@ def update_generic_devices(token):
     # print(data_embrionix)
     print('------------------------------------------')
     print(f'data_no_respect_inames: {len(data_no_respect_inames)}')
-    # print(data_no_respect_inames)
+    print(data_no_respect_inames)
     print('------------------------------------------')
     print(f'data not found: {len(data_not_found)}')
     print(data_not_found)
