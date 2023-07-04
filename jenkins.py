@@ -351,7 +351,7 @@ def update_generic_devices(token):
                 if dev:
                     print(f'{new_device.name} has been created')
             else:
-                print(f'{dev.name} already updated'
+                print(f'{dev.name} already updated')
         elif swt:
             data_switches.append(dev)
         else: # devices don't respect inames
