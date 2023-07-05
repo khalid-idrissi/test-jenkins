@@ -330,28 +330,25 @@ def update_generic_devices(token):
 
         elif emb:  # Embrionix
             data_embrionix.append(dev)
-            update_tag = nb.extras.tags.get(name='yaml_update')
-            if update_tag not in dev.tags:
-                new_tags = [update_tag] + dev.tags
+            yaml_update_tag = nb.extras.tags.get(name='yaml_update')
+            if yaml_update_tag not in dev.tags:
+                new_tags = [yaml_update_tag] + dev.tags
                 if int(dev.name.split('-')[1]) % 2 == 0:
                     device_type = nb.dcim.device_types.get(slug='eb22hdrt-lm-0516')
                 else:
                     device_type = nb.dcim.device_types.get(slug='eb22hdrt-lm-0514')
-                # data = {
-                    # 'name': dev.name,
-                    # 'site': dev.site.id,
-                    # 'device_type': device_type.id,
-                    # 'device_role': nb.dcim.device_roles.get(name='Video Gateway').id,
-                    # 'tenant': dev.tenant.id,
-                    # 'tags': new_tags,
-                    # 'status': 'active'
-                # }
-                # dev.delete()
-                # new_device = nb.dcim.devices.create(data)
-                # if dev:
-                    # print(f'{new_device.name} has been created')
-            else:
-                print(f'{dev.name} is a new device in netbox')
+                data = {
+                    'name': dev.name,
+                    'site': dev.site.id,
+                    'device_type': device_type.id,
+                    'device_role': nb.dcim.device_roles.get(name='Video Gateway').id,
+                    'tenant': dev.tenant.id,
+                    'tags': new_tags,
+                    'status': 'active'}
+                dev.update(data)
+                interfaces = list(nb.dcim.interfaces.filter(device_id=dev.id))
+                if len(interfaces) != 1 and interfaces[0].display != '1 (Riedel)':
+                    print(f'{dev.name} the interface must be updated')
 
         elif swt:
             data_switches.append(dev)
