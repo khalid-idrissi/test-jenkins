@@ -447,7 +447,7 @@ def update_generic_devices(token):
         elif dev.tenant.name == 'Media Production':
             ip_prod_updated.append(dev)
     total_applications = len(app1_total) + len(app2_total) + len(app3_total)
-    # update_conflence_page(total_devices, len(total_updated), len(data_embrionix), len(data_not_found), len(data_role_and_type_none), len(data_no_device_type), len(data_no_role), len(data_found_not_match),top_10_items, len(ip_pres_updated), len(ip_prod_updated), total_applications, len(data_switches), len(bed_total), len(data_updated), len(data_role_type_exists), len(data_no_respect_inames))
+    update_conflence_page(total_devices, len(total_updated), len(data_embrionix), len(data_not_found), len(data_role_and_type_none), len(data_no_device_type), len(data_no_role), len(data_found_not_match),top_10_items, len(ip_pres_updated), len(ip_prod_updated), total_applications, len(data_switches), len(bed_total), len(data_updated), len(data_role_type_exists), len(data_no_respect_inames))
 
 ####################################################################
 #                     Update Confluence page
