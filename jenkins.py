@@ -331,7 +331,7 @@ def update_generic_devices(token):
 
         elif bed:  # Broadcast endpoint devices
             bed_total.append(dev.name)
-            role = get_device_role(app3.group(1), roles_bed)
+            role = get_device_role(bed.group(1), roles_bed)
             data = update_device_netbox(dev, result, role)
             data_role_and_type_none.extend(data[0])
             data_no_role.extend(data[1])
