@@ -172,7 +172,7 @@ def get_device_role(pattern, roles):
 ####################################################################
 #                      Update device Netbox
 ####################################################################
-def update_device_netbox(dev, result, accronym, roles):
+def update_device_netbox(dev, result, role):
 
     data_role_and_type_none = []
     data_no_role = []
@@ -186,7 +186,7 @@ def update_device_netbox(dev, result, accronym, roles):
 
     if result != {}:
         if dev.name in result['hostname_pywire']:  # the device name match with pywire
-            role = get_device_role(accronym, roles)
+            # role = get_device_role(accronym, roles)
             device_type = nb.dcim.device_types.get(slug=slugify(result['device_type']))
             if role is None and device_type is None:
                 data_role_and_type_none.append(
@@ -278,7 +278,8 @@ def update_generic_devices(token):
         result = get_device_data_from_pywire(dev, token)
         if app1:  # Applications type 1
             app1_total.append(dev.name)
-            data = update_device_netbox(dev, result, app1.group(1), roles_app)
+            role = get_device_role(app1.group(1), roles_app)
+            data = update_device_netbox(dev, result, role)
             data_role_and_type_none.extend(data[0])
             data_no_role.extend(data[1])
             data_no_device_type.extend(data[2])
@@ -291,7 +292,8 @@ def update_generic_devices(token):
 
         elif app2:  # Applications type 2
             app2_total.append(dev.name)
-            data = update_device_netbox(dev, result, app2.group(1), roles_app)
+            role = get_device_role(app2.group(1), roles_app)
+            data = update_device_netbox(dev, result, role)
             data_role_and_type_none.extend(data[0])
             data_no_role.extend(data[1])
             data_no_device_type.extend(data[2])
@@ -304,7 +306,19 @@ def update_generic_devices(token):
 
         elif app3:  # Applications type 3
             app3_total.append(dev.name)
-            data = update_device_netbox(dev, result, app3.group(1), roles_app)
+            role = get_device_role(app3.group(1), roles_app)
+            if role == None:
+                count = 0
+                for char in reversed(device.name):
+                    if char.isdigit():
+                        count += 1
+                    else:
+                        break
+                if count == 3:
+                    accronym = device.name[-6:-3]
+                    role = get_device_role(accronym, roles_app)
+            
+            data = update_device_netbox(dev, result, role)
             data_role_and_type_none.extend(data[0])
             data_no_role.extend(data[1])
             data_no_device_type.extend(data[2])
@@ -317,7 +331,8 @@ def update_generic_devices(token):
 
         elif bed:  # Broadcast endpoint devices
             bed_total.append(dev.name)
-            data = update_device_netbox(dev, result, bed.group(1), roles_bed)
+            role = get_device_role(app3.group(1), roles_bed)
+            data = update_device_netbox(dev, result, role)
             data_role_and_type_none.extend(data[0])
             data_no_role.extend(data[1])
             data_no_device_type.extend(data[2])
@@ -354,7 +369,8 @@ def update_generic_devices(token):
             data_switches.append(dev)
         else: # devices don't respect inames
             data_no_respect_inames.append(dev.name)
-            data = update_device_netbox(dev, result, dev.name, roles_bed + roles_app)
+            role = get_device_role(dev.name, roles_bed + roles_app)
+            data = update_device_netbox(dev, result, role)
             data_role_and_type_none.extend(data[0])
             data_no_role.extend(data[1])
             data_no_device_type.extend(data[2])
