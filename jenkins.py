@@ -306,32 +306,18 @@ def update_generic_devices(token):
 
         elif app3:  # Applications type 3
             app3_total.append(dev.name)
-            role = get_device_role(app3.group(1), roles_app)
-            if role == None:
-                count = 0
-                for char in reversed(dev.name):
-                    if char.isdigit():
-                        count += 1
-                    else:
-                        break
-                if count == 3:
-                    accronym = dev.name[-6:-3]
-                    role = get_device_role(accronym, roles_app)
+            # role = get_device_role(app3.group(1), roles_app)
+            # if role == None:
+                # count = 0
+                # for char in reversed(dev.name):
+                    # if char.isdigit():
+                        # count += 1
+                    # else:
+                        # break
+                # if count == 3:
+                    # accronym = dev.name[-6:-3]
+                    # role = get_device_role(accronym, roles_app)
             
-            data = update_device_netbox(dev, result, role)
-            data_role_and_type_none.extend(data[0])
-            data_no_role.extend(data[1])
-            data_no_device_type.extend(data[2])
-            data_updated.extend(data[3])
-            data_found_not_match.extend(data[4])
-            data_not_found.extend(data[5])
-            data_alredy_updated.extend(data[6])
-            data_type_or_role_none.extend(data[7])
-            data_role_type_exists.extend(data[8])
-
-        elif bed:  # Broadcast endpoint devices
-            bed_total.append(dev.name)
-            # role = get_device_role(bed.group(1), roles_bed)
             # data = update_device_netbox(dev, result, role)
             # data_role_and_type_none.extend(data[0])
             # data_no_role.extend(data[1])
@@ -342,6 +328,20 @@ def update_generic_devices(token):
             # data_alredy_updated.extend(data[6])
             # data_type_or_role_none.extend(data[7])
             # data_role_type_exists.extend(data[8])
+
+        elif bed:  # Broadcast endpoint devices
+            bed_total.append(dev.name)
+            role = get_device_role(bed.group(1), roles_bed)
+            data = update_device_netbox(dev, result, role)
+            data_role_and_type_none.extend(data[0])
+            data_no_role.extend(data[1])
+            data_no_device_type.extend(data[2])
+            data_updated.extend(data[3])
+            data_found_not_match.extend(data[4])
+            data_not_found.extend(data[5])
+            data_alredy_updated.extend(data[6])
+            data_type_or_role_none.extend(data[7])
+            data_role_type_exists.extend(data[8])
 
         elif emb:  # Embrionix
             data_embrionix.append(dev)
