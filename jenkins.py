@@ -309,13 +309,13 @@ def update_generic_devices(token):
             role = get_device_role(app3.group(1), roles_app)
             if role == None:
                 count = 0
-                for char in reversed(device.name):
+                for char in reversed(dev.name):
                     if char.isdigit():
                         count += 1
                     else:
                         break
                 if count == 3:
-                    accronym = device.name[-6:-3]
+                    accronym = dev.name[-6:-3]
                     role = get_device_role(accronym, roles_app)
             
             data = update_device_netbox(dev, result, role)
