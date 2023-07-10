@@ -23,7 +23,7 @@ nb.http_session.verify = False
 ####################################################################
 #                 Trace path by switch and port
 ####################################################################
-def api_trace_path_byswitch_and_port(switch_port, token):
+def api_trace_path_byswitch_and_port(switch_port, token, dev):
 
     port = switch_port['port']
     switch = switch_port['switch']
@@ -57,6 +57,7 @@ def api_trace_path_byswitch_and_port(switch_port, token):
         if len(responseData) > 0:
                 # and device['hostname'] in responseData[0]['path_ep2']['alias']:
             result = {
+                'device_name': dev.name,
                 'hostname_pywire': responseData[0]['path_ep2']['alias'].split('\n')[0],
                 'device_type': responseData[0]['path_ep2']['equipment_name'].split('\n')[0],
                 'rack': responseData[0]['path_ep2']['location'].split('\n')[0],
@@ -115,7 +116,7 @@ def api_template_data_from_device_with_auto_match(device_name, token):
 def get_device_data_from_pywire(dev, token):
 
     result = api_template_data_from_device_with_auto_match(dev.name, token)
-
+    switch_and_port = {}
     if result != {}:
         return result
     else:
@@ -131,9 +132,10 @@ def get_device_data_from_pywire(dev, token):
                     switch_and_port = {'switch': interface.connected_endpoints[0].device.name,
                                        'port': interface.connected_endpoints[0].name.split('Ethernet')[1]}
 
-                    result = api_trace_path_byswitch_and_port(switch_and_port, token)
+                    result = api_trace_path_byswitch_and_port(switch_and_port, token, dev)
+                    result.update({'device_name': dev.name, "switch": switch_and_port['switch'], 'port': switch_and_port['port']})
                     if result != {} and dev.name in result['hostname_pywire']:
-                        result.update({'device_name': dev.name, "switch": switch_and_port['switch'], 'port': switch_and_port['port']})
+                        # result.update({'device_name': dev.name, "switch": switch_and_port['switch'], 'port': switch_and_port['port']})
                         return result
 
             return result
@@ -396,16 +398,16 @@ def update_generic_devices(token):
     # print(app3_total)
     print('------------------------------------------')
     print(f'broadcast endpoint devices: {len(bed_total)}')
-    print(bed_total)
+    # print(bed_total)
     print('------------------------------------------')
     print(f'data switches {len(data_switches)}')
     # print(data_switches)
     print('------------------------------------------')
     print(f'data_embrionix {len(data_embrionix)}')
-    print(data_embrionix)
+    # print(data_embrionix)
     print('------------------------------------------')
     print(f'data_no_respect_inames: {len(data_no_respect_inames)}')
-    # print(data_no_respect_inames)
+    print(data_no_respect_inames)
     print('------------------------------------------')
     print(f'data not found: {len(data_not_found)}')
     print(data_not_found)
