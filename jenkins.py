@@ -133,10 +133,11 @@ def get_device_data_from_pywire(dev, token):
                                        'port': interface.connected_endpoints[0].name.split('Ethernet')[1]}
 
                     result = api_trace_path_byswitch_and_port(switch_and_port, token, dev)
-                    result.update({'device_name': dev.name, "switch": switch_and_port['switch'], 'port': switch_and_port['port']})
+                    # result.update({'device_name': dev.name, "switch": switch_and_port['switch'], 'port': switch_and_port['port']})
                     if result != {} and dev.name in result['hostname_pywire']:
-                        # result.update({'device_name': dev.name, "switch": switch_and_port['switch'], 'port': switch_and_port['port']})
                         return result
+                    elif result != {} and dev.name not in result['hostname_pywire']:
+                        result.update({'device_name': dev.name, "switch": switch_and_port['switch'], 'port': switch_and_port['port']})
 
             return result
 
