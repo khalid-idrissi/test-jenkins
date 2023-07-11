@@ -226,7 +226,7 @@ def update_device_netbox(dev, result, role):
         else:  # the device name doesn't match with pywire
             data_found_not_match.append(result)
     else:  # the device is not found
-        data_not_found.append(dev)
+        data_not_found.append(dev.name)
 
     return data_role_and_type_none, data_no_role, data_no_device_type, data_updated, data_found_not_match, \
            data_not_found, data_alredy_updated, data_type_or_role_none, data_role_type_exists
