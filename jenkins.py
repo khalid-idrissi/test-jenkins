@@ -277,112 +277,118 @@ def update_generic_devices(token):
         bed = re.match(regexBpd, dev.name)
         emb = re.match(regexEmb, dev.name)
         swt = re.match(switchregex, dev.name)
+        #check if the device is already updated
+        tag = nb.extras.tags.get(name='yaml_update')
+        if dev.device_type.display != 'Generic' and dev.device_role.display != 'Generic' and tag not in dev.tags:
+            new_tags = [tag] + dev.tags
+            dev.update({'tags': new_tags})
+            print(f'{dev.name} is tagged updated')
+        else:
+            result = get_device_data_from_pywire(dev, token)
+            if app1:  # Applications type 1
+                app1_total.append(dev.name)
+                role = get_device_role(app1.group(1), roles_app)
+                data = update_device_netbox(dev, result, role)
+                data_role_and_type_none.extend(data[0])
+                data_no_role.extend(data[1])
+                data_no_device_type.extend(data[2])
+                data_updated.extend(data[3])
+                data_found_not_match.extend(data[4])
+                data_not_found.extend(data[5])
+                data_alredy_updated.extend(data[6])
+                data_type_or_role_none.extend(data[7])
+                data_role_type_exists.extend(data[8])
 
-        result = get_device_data_from_pywire(dev, token)
-        if app1:  # Applications type 1
-            app1_total.append(dev.name)
-            role = get_device_role(app1.group(1), roles_app)
-            data = update_device_netbox(dev, result, role)
-            data_role_and_type_none.extend(data[0])
-            data_no_role.extend(data[1])
-            data_no_device_type.extend(data[2])
-            data_updated.extend(data[3])
-            data_found_not_match.extend(data[4])
-            data_not_found.extend(data[5])
-            data_alredy_updated.extend(data[6])
-            data_type_or_role_none.extend(data[7])
-            data_role_type_exists.extend(data[8])
+            elif app2:  # Applications type 2
+                app2_total.append(dev.name)
+                role = get_device_role(app2.group(1), roles_app)
+                data = update_device_netbox(dev, result, role)
+                data_role_and_type_none.extend(data[0])
+                data_no_role.extend(data[1])
+                data_no_device_type.extend(data[2])
+                data_updated.extend(data[3])
+                data_found_not_match.extend(data[4])
+                data_not_found.extend(data[5])
+                data_alredy_updated.extend(data[6])
+                data_type_or_role_none.extend(data[7])
+                data_role_type_exists.extend(data[8])
 
-        elif app2:  # Applications type 2
-            app2_total.append(dev.name)
-            role = get_device_role(app2.group(1), roles_app)
-            data = update_device_netbox(dev, result, role)
-            data_role_and_type_none.extend(data[0])
-            data_no_role.extend(data[1])
-            data_no_device_type.extend(data[2])
-            data_updated.extend(data[3])
-            data_found_not_match.extend(data[4])
-            data_not_found.extend(data[5])
-            data_alredy_updated.extend(data[6])
-            data_type_or_role_none.extend(data[7])
-            data_role_type_exists.extend(data[8])
+            elif app3:  # Applications type 3
+                app3_total.append(dev.name)
+                role = get_device_role(app3.group(1), roles_app)
+                if role == None:
+                    count = 0
+                    for char in reversed(dev.name):
+                        if char.isdigit():
+                            count += 1
+                        else:
+                            break
+                    if count == 3:
+                        accronym = dev.name[-6:-3]
+                        role = get_device_role(accronym, roles_app)
+                
+                data = update_device_netbox(dev, result, role)
+                data_role_and_type_none.extend(data[0])
+                data_no_role.extend(data[1])
+                data_no_device_type.extend(data[2])
+                data_updated.extend(data[3])
+                data_found_not_match.extend(data[4])
+                data_not_found.extend(data[5])
+                data_alredy_updated.extend(data[6])
+                data_type_or_role_none.extend(data[7])
+                data_role_type_exists.extend(data[8])
 
-        elif app3:  # Applications type 3
-            app3_total.append(dev.name)
-            role = get_device_role(app3.group(1), roles_app)
-            if role == None:
-                count = 0
-                for char in reversed(dev.name):
-                    if char.isdigit():
-                        count += 1
+            elif bed:  # Broadcast endpoint devices
+                bed_total.append(dev.name)
+                role = get_device_role(bed.group(1), roles_bed)
+                data = update_device_netbox(dev, result, role)
+                data_role_and_type_none.extend(data[0])
+                data_no_role.extend(data[1])
+                data_no_device_type.extend(data[2])
+                data_updated.extend(data[3])
+                data_found_not_match.extend(data[4])
+                data_not_found.extend(data[5])
+                data_alredy_updated.extend(data[6])
+                data_type_or_role_none.extend(data[7])
+                data_role_type_exists.extend(data[8])
+
+            elif emb:  # Embrionix
+                data_embrionix.append(dev)
+                yaml_update_tag = nb.extras.tags.get(name='yaml_update')
+                if yaml_update_tag not in dev.tags:
+                    new_tags = [yaml_update_tag] + dev.tags
+                    if int(dev.name.split('-')[1]) % 2 == 0:
+                        device_type = nb.dcim.device_types.get(slug='eb22hdrt-lm-0516')
                     else:
-                        break
-                if count == 3:
-                    accronym = dev.name[-6:-3]
-                    role = get_device_role(accronym, roles_app)
-            
-            data = update_device_netbox(dev, result, role)
-            data_role_and_type_none.extend(data[0])
-            data_no_role.extend(data[1])
-            data_no_device_type.extend(data[2])
-            data_updated.extend(data[3])
-            data_found_not_match.extend(data[4])
-            data_not_found.extend(data[5])
-            data_alredy_updated.extend(data[6])
-            data_type_or_role_none.extend(data[7])
-            data_role_type_exists.extend(data[8])
+                        device_type = nb.dcim.device_types.get(slug='eb22hdrt-lm-0514')
+                    data = {
+                        'name': dev.name,
+                        'site': dev.site.id,
+                        'device_type': device_type.id,
+                        'device_role': nb.dcim.device_roles.get(name='Video Gateway').id,
+                        'tenant': dev.tenant.id,
+                        'tags': new_tags,
+                        'status': 'active'}
+                    dev.update(data)
+                    interfaces = list(nb.dcim.interfaces.filter(device_id=dev.id))
+                    if len(interfaces) != 1 and interfaces[0].display != '1 (Riedel)':
+                        print(f'{dev.name} the interface must be updated')
 
-        elif bed:  # Broadcast endpoint devices
-            bed_total.append(dev.name)
-            role = get_device_role(bed.group(1), roles_bed)
-            data = update_device_netbox(dev, result, role)
-            data_role_and_type_none.extend(data[0])
-            data_no_role.extend(data[1])
-            data_no_device_type.extend(data[2])
-            data_updated.extend(data[3])
-            data_found_not_match.extend(data[4])
-            data_not_found.extend(data[5])
-            data_alredy_updated.extend(data[6])
-            data_type_or_role_none.extend(data[7])
-            data_role_type_exists.extend(data[8])
-
-        elif emb:  # Embrionix
-            data_embrionix.append(dev)
-            yaml_update_tag = nb.extras.tags.get(name='yaml_update')
-            if yaml_update_tag not in dev.tags:
-                new_tags = [yaml_update_tag] + dev.tags
-                if int(dev.name.split('-')[1]) % 2 == 0:
-                    device_type = nb.dcim.device_types.get(slug='eb22hdrt-lm-0516')
-                else:
-                    device_type = nb.dcim.device_types.get(slug='eb22hdrt-lm-0514')
-                data = {
-                    'name': dev.name,
-                    'site': dev.site.id,
-                    'device_type': device_type.id,
-                    'device_role': nb.dcim.device_roles.get(name='Video Gateway').id,
-                    'tenant': dev.tenant.id,
-                    'tags': new_tags,
-                    'status': 'active'}
-                dev.update(data)
-                interfaces = list(nb.dcim.interfaces.filter(device_id=dev.id))
-                if len(interfaces) != 1 and interfaces[0].display != '1 (Riedel)':
-                    print(f'{dev.name} the interface must be updated')
-
-        elif swt:
-            data_switches.append(dev)
-        else: # devices don't respect inames
-            data_no_respect_inames.append(dev.name)
-            role = get_device_role(dev.name, roles_bed + roles_app)
-            data = update_device_netbox(dev, result, role)
-            data_role_and_type_none.extend(data[0])
-            data_no_role.extend(data[1])
-            data_no_device_type.extend(data[2])
-            data_updated.extend(data[3])
-            data_found_not_match.extend(data[4])
-            data_not_found.extend(data[5])
-            data_alredy_updated.extend(data[6])
-            data_type_or_role_none.extend(data[7])
-            data_role_type_exists.extend(data[8])
+            elif swt:
+                data_switches.append(dev)
+            else: # devices don't respect inames
+                data_no_respect_inames.append(dev.name)
+                role = get_device_role(dev.name, roles_bed + roles_app)
+                data = update_device_netbox(dev, result, role)
+                data_role_and_type_none.extend(data[0])
+                data_no_role.extend(data[1])
+                data_no_device_type.extend(data[2])
+                data_updated.extend(data[3])
+                data_found_not_match.extend(data[4])
+                data_not_found.extend(data[5])
+                data_alredy_updated.extend(data[6])
+                data_type_or_role_none.extend(data[7])
+                data_role_type_exists.extend(data[8])
 
     # write_to_csv_file(data_role_and_type_none, 'data_role_and_type_none', ['device','type', 'tenant'])
     # write_to_csv_file(data_no_device_type, 'data_no_device_type', ['device', 'tenant', 'type', 'role'])
