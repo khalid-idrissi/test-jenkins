@@ -515,19 +515,17 @@ def update_conflence_page(total_devices, total_devices_updated, total_embrionix,
 def update_data_not_found_spreadsheet(data_not_found):
     creds = ServiceAccountCredentials.from_json_keyfile_name(secret_file, SCOPES)
     file = gspread.authorize(creds)
-    workbook = file.open('testkhalid')
-    worksheet = workbook.worksheet('hostnames')
+    workbook = file.open('data_migration')
+    worksheet = workbook.worksheet('data_not_found')
     existing_data = worksheet.col_values(1)[1:]
     new_hostnames = [hostname for hostname in data_not_found if hostname not in existing_data]
     print(new_hostnames)
 
     if new_hostnames:
-        # Append the filtered new hostnames to the existing data
         data_to_write = [[hostname, '', ''] for hostname in new_hostnames]
         worksheet.append_rows(data_to_write)
+        print("New hostnames added to the Google Sheet:")
         print(data_to_write)
-
-        print("New hostnames added to the Google Sheet.")
     else:
         print("No new hostnames to add to the Google Sheet.")
 ####################################################################
