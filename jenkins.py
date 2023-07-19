@@ -23,6 +23,7 @@ nb = pynetbox.api(
         )
 nb.http_session.verify = False
 
+SCOPES = ['https://www.googleapis.com/auth/spreadsheets','https://www.googleapis.com/auth/drive']
 ####################################################################
 #                 Trace path by switch and port
 ####################################################################
@@ -508,26 +509,16 @@ def update_conflence_page(total_devices, total_devices_updated, total_embrionix,
                            representation='storage',
                            minor_edit=False, full_width=False)
 
-
 ####################################################################
-#                     Main
+#              update_data_not_found_spreadsheet
 ####################################################################
-
-if __name__ == '__main__':
-
-    # token_result = get_token(tpywire)
-    # update_generic_devices(token_result)
-
-    SCOPES = ['https://www.googleapis.com/auth/spreadsheets',
-              'https://www.googleapis.com/auth/drive']
-
+def update_data_not_found_spreadsheet(data_not_found):
     creds = ServiceAccountCredentials.from_json_keyfile_name(secret_file, SCOPES)
     file = gspread.authorize(creds)
     workbook = file.open('testkhalid')
     worksheet = workbook.worksheet('hostnames')
     existing_data = worksheet.col_values(1)[1:]
-    data = ['A_changer', 'allo', 'allo1', 'BLC11B1-A02', 'CBC5T9RZV2', 'CET1-H04-47', 'CET1-NPU1', 'CET1-NPU2', 'CET1-NPU3', 'CET1-NPU4', 'CGG2-0181', 'CGG2-0183', 'cisco_uplink_1', 'ETN-EV1', 'ETN-EV2', 'mtlkjh54', 'Torhty765', 'Torhty7657', 'Torhty7659']
-    new_hostnames = [hostname for hostname in data if hostname not in existing_data]
+    new_hostnames = [hostname for hostname in data_not_found if hostname not in existing_data]
     print(new_hostnames)
 
     if new_hostnames:
@@ -539,6 +530,18 @@ if __name__ == '__main__':
         print("New hostnames added to the Google Sheet.")
     else:
         print("No new hostnames to add to the Google Sheet.")
+####################################################################
+#                     Main
+####################################################################
+
+if __name__ == '__main__':
+
+    # token_result = get_token(tpywire)
+    # update_generic_devices(token_result)
+    data = ['A_changer', 'allo', 'allo1', 'BLC11B1-A02', 'CBC5T9RZV2', 'CET1-H04-47', 'CET1-NPU1', 'CET1-NPU2', 'CET1-NPU3', 'CET1-NPU4', 'CGG2-0181', 'CGG2-0183', 'cisco_uplink_1', 'ETN-EV1', 'ETN-EV2', 'FRAME V_MATRIX_1_CET1', 'FRAME V_MATRIX_1_CET2', 'FRAME V_MATRIX_2_CET1', 'FRAME V_MATRIX_2_CET2', 'FRAME V_MATRIX_3_CET1', 'FRAME V_MATRIX_3_CET2', 'FRAME V_MATRIX_4_CET1', 'FRAME V_MATRIX_4_CET2', 'FRAME V_MATRIX_5_CET1', 'FRAME V_MATRIX_5_CET2', 'FRAME V_MATRIX_6_CET1', 'FRAME V_MATRIX_6_CET2', 'FRAME V_MATRIX_7_CET1', 'FRAME V_MATRIX_8_CET1', 'Movable  CTRL', 'MSB01-A04', 'MSB01-A05', 'MSB01-A07', 'MSB01-A08', 'MSB01-A09', 'MSB01-A10', 'MTLCET1PREPPOPWC01', 'MTLCET1PREPPOPWC02', 'MTLCET1PREPPOPWC03', 'MTLCET1PREPPOPWC04', 'MTLCET1PREPPOPWC05', 'MTLCET1PREPPOPWC06', 'MTLCET1PREPPOPWC07', 'MTLCET1PREPPOPWC08', 'MTLCET1PREPPOPWC09', 'MTLCET1PREPPOPWC10', 'MTLCET1PREPPOPWC22', 'MTLCET1PREPPOPWC23', 'MTLCET1PREPPOPWC24', 'MTLCET1PREPPOPWC25', 'MTLCET1PREPPOPWC27', 'MTLCET1PREPPOPWC28', 'MTLCET1PREPPOPWC29', 'MTLCET1PREPPOPWC30', 'MTLCET2PREPPOPWC51', 'MTLCET2PREPPOPWC52', 'MTLCET2PREPPOPWC53', 'MTLCET2PREPPOPWC54', 'MTLCET2PREPPOPWC55', 'MTLCET2PREPPOPWC56', 'MTLCET2PREPPOPWC57', 'MTLCET2PREPPOPWC58', 'MTLCET2PREPPOPWC59', 'MTLCET2PREPPOPWC60', 'MTLCISCOSW01', 'MTLDDTRPPSTDLAB', 'MTLDFSGTFJH63F', 'MTLDMS89DCT13F', 'MTLDMSGTJH63F', 'MTL-GRANDE', 'MTLLABITC01-01', 'MTLLABITC01-02', 'MTLLABITC01-04', 'MTLLABITC01-05', 'MTLLABITC01-10', 'MTLLABITC02-01', 'MTLLABITC02-02', 'MTLLABITC03', 'MTLLABITC04', 'MTLLABITC05', 'MTLLABITC06', 'MTLMEOPREPPOPWC17', 'MTLMEOPREPPOPWC18', 'MTLMEOPREPPOPWC19', 'MTLMEOPREPPOPWC20', 'MTLMEOPREPPOPWC21', 'MTLMEOPREPPOPWC31', 'MTLMEOPREPPOPWC32', 'MTLMPX1235', 'MTLMPX1236', 'MTLMPX1237', 'MTLMPX1238', 'MTLMPX1239', 'MTLMPX1248', 'MTLMPX1249', 'MTLMPX1250', 'MTLMPX1251', 'MTLMPX1252', 'MTLMPX1253', 'MTLMPX1254', 'MTLMPX1255', 'MTLMPX1256', 'MTLMPX1257', 'MTLMPX1258', 'MTLMPX1259', 'MTLMPX1260', 'MTLMPX1261', 'MTLMPX1262', 'MTLMPX1263', 'MTLMPX1264', 'MTLMPX1265', 'MTLMPX1266', 'MTLMPX1267', 'MTLMPX1269', 'MTLMPX1270', 'MTLMPX1271', 'MTLMPX1273', 'MTLMPX1275', 'MTLMPX1276', 'MTLMPX1277', 'MTLMPX1278', 'MTLMPX1279', 'MTLMPX1280', 'MTLMPX1281', 'MTLMPX1282', 'MTLMPX1283', 'MTLMPX1284', 'MTLMPX1285', 'MTLMPX1286', 'MTLMPX1287', 'MTLMPX1288', 'MTLMPX1289', 'MTLMPX1291', 'MTLMPX1292', 'MTLMPX1293', 'MTLMPX1294', 'MTLMPX1295', 'MTLMPX1296', 'MTLMPX1297', 'MTLMPX1298', 'MTLMPX1299', 'MTLMPX1300', 'MTLMPX1301', 'MTLMPX1309', 'MTLMPX1310', 'MTLMPX1311', 'MTLMPXAFXJ2101', 'MTLMPXAFXJ2102', 'MTLMPXAFXJ2201', 'MTLMPXAFXJ2202', 'MTLMPXAFXJ2301', 'MTLMPXAFXJ2302', 'MTLMPXAFXJ2401', 'MTLMPXAFXJ2402', 'MTLMPXAGW110A', 'MTLMPXAGW110B', 'MTLMPXAGW111A', 'MTLMPXAGW111B', 'MTLMPXAPC001-2', 'MTLMPXAPC001-4', 'MTLMPXAPC001-5', 'MTLMPXAPC001-6', 'MTLMPXAPC001-7', 'MTLMPXAPC001-8', 'MTLMPXAPC001-9', 'MTLMPXAPC001-10', 'MTLMPXAPC002-2', 'MTLMPXAPC002-4', 'MTLMPXAPC002-5', 'MTLMPXAPC002-6', 'MTLMPXAPC002-7', 'MTLMPXAPC002-8', 'MTLMPXAPC002-9', 'MTLMPXAPC002-10', 'MTLMPXAPC003-2', 'MTLMPXAPC003-4', 'MTLMPXAPC003-7', 'MTLMPXAPC003-9', 'MTLMPXAPC004-2', 'MTLMPXAPC004-4', 'MTLMPXAPC004-7', 'MTLMPXAPC004-9', 'MTLMPXAPC005-2', 'MTLMPXAPC005-4']
+    update_data_not_found_spreadsheet(data)
+
+
 
    
 
