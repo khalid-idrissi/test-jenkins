@@ -4,6 +4,7 @@ pipeline {
 		netboxtoken = credentials('netboxtoken')
 		tokenpywire = credentials('tokenpywire')
 		tokenatlassian = credentials('atlassiantoken')
+		secretfile = credentials('SECRET_FILE')
     }
     stages {
         stage('Intsall Packages') {

@@ -6,17 +6,20 @@ import requests as req
 import urllib3
 from slugify import slugify
 from atlassian import Confluence
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 
 urllib3.disable_warnings()
 # Access environment variables
 tnetbox = sys.argv[1]
 tpywire = sys.argv[2]
 atlassiantoken = sys.argv[3]
+secret_file = sys.argv[4]
 
 #pynetbox
 nb = pynetbox.api(
             url='https://netbox.cbc-rc.ca/',
-            token= tnetbox
+            token=tnetbox
         )
 nb.http_session.verify = False
 
@@ -512,10 +515,23 @@ def update_conflence_page(total_devices, total_devices_updated, total_embrionix,
 
 if __name__ == '__main__':
 
-    token_result = get_token(tpywire)
-    update_generic_devices(token_result)
+    # token_result = get_token(tpywire)
+    # update_generic_devices(token_result)
+
+    print('start script')
+    # Replace with the path to your service account key file (JSON)
+    SERVICE_ACCOUNT_KEY_FILE = secret_file
+
+    SCOPES = ['https://www.googleapis.com/auth/spreadsheets',
+              'https://www.googleapis.com/auth/drive']
+
+    creds = ServiceAccountCredentials.from_json_keyfile_name('secre_key.json', SCOPES)
+    file = gspread.authorize(creds)
+    workbook = file.open('testkhalid')
+    worksheet = workbook.worksheet('hostnames')
+    data = worksheet.get_all_values()
     
-    
+    print('end of the script')
    
 
     
