@@ -520,6 +520,7 @@ def update_data_found_not_match(data_found_not_match):
     existing_data = worksheet.get_all_records()
     existing_device_names = set(device['device_name'] for device in existing_data)
     new_data_without_duplicates = [device for device in data_found_not_match if device['device_name'] not in existing_device_names]
+    print(f'New hostnames added to the Google Sheet data_found_not_match: {len(new_data_without_duplicates)}')
     print(new_data_without_duplicates)
     for device in new_data_without_duplicates:
         worksheet.append_row([device['device_name'], device['hostname_pywire'], device['device_type'], device['rack'],
@@ -541,10 +542,10 @@ def update_data_not_found_spreadsheet(data_not_found):
     if new_hostnames:
         data_to_write = [[hostname, '', ''] for hostname in new_hostnames]
         worksheet.append_rows(data_to_write)
-        print("New hostnames added to the Google Sheet:")
+        print("New hostnames added to the Google Sheet data_not_found:")
         print(data_to_write)
     else:
-        print("No new hostnames to add to the Google Sheet.")
+        print("No new hostnames to add to the Google Sheet data_not_found")
 ####################################################################
 #                     Main
 ####################################################################
