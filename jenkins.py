@@ -526,7 +526,7 @@ if __name__ == '__main__':
     workbook = file.open('testkhalid')
     worksheet = workbook.worksheet('hostnames')
     existing_data = worksheet.col_values(1)[1:]
-    data = ['A_changer', 'allo', 'allo1', 'BLC11B1-A02', 'CBC5T9RZV2', 'CET1-H04-47', 'CET1-NPU1', 'CET1-NPU2', 'CET1-NPU3', 'CET1-NPU4', 'CGG2-0181', 'CGG2-0183', 'cisco_uplink_1', 'ETN-EV1', 'ETN-EV2', 'mtlkjh54', 'Torhty765']
+    data = ['A_changer', 'allo', 'allo1', 'BLC11B1-A02', 'CBC5T9RZV2', 'CET1-H04-47', 'CET1-NPU1', 'CET1-NPU2', 'CET1-NPU3', 'CET1-NPU4', 'CGG2-0181', 'CGG2-0183', 'cisco_uplink_1', 'ETN-EV1', 'ETN-EV2', 'mtlkjh54', 'Torhty765', 'Torhty7657', 'Torhty7659']
     new_hostnames = [hostname for hostname in data if hostname not in existing_data]
     print(new_hostnames)
 
