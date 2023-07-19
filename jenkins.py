@@ -530,7 +530,7 @@ if __name__ == '__main__':
     workbook = file.open('testkhalid')
     worksheet = workbook.worksheet('hostnames')
     data = worksheet.get_all_values()
-    
+    print(data)
     print('end of the script')
    
 
