@@ -545,7 +545,7 @@ def update_data_not_found_spreadsheet(data_not_found):
     if new_hostnames:
         data_to_write = [[hostname, '', ''] for hostname in new_hostnames]
         worksheet.append_rows(data_to_write)
-        print("New hostnames added to the Google Sheet data_not_found:")
+        print(f"New hostnames added to the Google Sheet data_not_found: {len(data_to_write)}")
         print(data_to_write)
     else:
         print("No new hostnames to add to the Google Sheet data_not_found")
