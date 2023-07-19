@@ -520,12 +520,12 @@ if __name__ == '__main__':
 
     print('start script')
     # Replace with the path to your service account key file (JSON)
-    SERVICE_ACCOUNT_KEY_FILE = secret_file
+    # SERVICE_ACCOUNT_KEY_FILE = secret_file
 
     SCOPES = ['https://www.googleapis.com/auth/spreadsheets',
               'https://www.googleapis.com/auth/drive']
 
-    creds = ServiceAccountCredentials.from_json_keyfile_name('secre_key.json', SCOPES)
+    creds = ServiceAccountCredentials.from_json_keyfile_name(secret_file, SCOPES)
     file = gspread.authorize(creds)
     workbook = file.open('testkhalid')
     worksheet = workbook.worksheet('hostnames')
