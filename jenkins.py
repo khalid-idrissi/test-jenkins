@@ -518,10 +518,6 @@ if __name__ == '__main__':
     # token_result = get_token(tpywire)
     # update_generic_devices(token_result)
 
-    print('start script')
-    # Replace with the path to your service account key file (JSON)
-    # SERVICE_ACCOUNT_KEY_FILE = secret_file
-
     SCOPES = ['https://www.googleapis.com/auth/spreadsheets',
               'https://www.googleapis.com/auth/drive']
 
@@ -529,9 +525,21 @@ if __name__ == '__main__':
     file = gspread.authorize(creds)
     workbook = file.open('testkhalid')
     worksheet = workbook.worksheet('hostnames')
-    data = worksheet.get_all_values()
-    print(data)
-    print('end of the script')
+    existing_data = worksheet.col_values(1)[1:]
+    data = ['A_changer', 'allo', 'allo1', 'BLC11B1-A02', 'CBC5T9RZV2', 'CET1-H04-47', 'CET1-NPU1', 'CET1-NPU2', 'CET1-NPU3', 'CET1-NPU4', 'CGG2-0181', 'CGG2-0183', 'cisco_uplink_1', 'ETN-EV1', 'ETN-EV2', 'mtlkjh54', 'Torhty765']
+    new_hostnames = [hostname for hostname in data if hostname not in existing_data]
+    print(new_hostnames)
+
+    if new_hostnames:
+        # Append the filtered new hostnames to the existing data
+        data_to_write = [[hostname, '', ''] for hostname in new_hostnames]
+        worksheet.append_rows(data_to_write)
+        print(data_to_write)
+
+        print("New hostnames added to the Google Sheet.")
+    else:
+        print("No new hostnames to add to the Google Sheet.")
+
    
 
     
