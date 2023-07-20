@@ -125,8 +125,8 @@ def get_device_data_from_pywire(dev, token):
     if result != {}:
         return result
     else:
-        device = nb.dcim.devices.get(name=dev.name)
-        interfaces = nb.dcim.interfaces.filter(device_id=device.id)
+        # device = nb.dcim.devices.get(name=dev.name)
+        interfaces = nb.dcim.interfaces.filter(device_id=dev.id)
         if len(interfaces) == 0:
             return {}
         else:
@@ -561,9 +561,7 @@ def update_data_not_found_spreadsheet(data_not_found):
 ####################################################################
 #                     Main
 ####################################################################
-
 if __name__ == '__main__':
-
     token_result = get_token(tpywire)
     update_generic_devices(token_result)
 
