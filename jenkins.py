@@ -496,6 +496,7 @@ def update_generic_devices(token):
     # Update google spreadsheet
     # update_data_not_found_spreadsheet(data_not_found)
     # update_data_found_not_match(data_found_not_match)
+    # end function
 
 
 ####################################################################
