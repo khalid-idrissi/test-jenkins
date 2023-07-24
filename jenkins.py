@@ -497,6 +497,7 @@ def update_generic_devices(token):
     # update_data_not_found_spreadsheet(data_not_found)
     # update_data_found_not_match(data_found_not_match)
 
+
 ####################################################################
 #                     Update Confluence page
 ####################################################################
