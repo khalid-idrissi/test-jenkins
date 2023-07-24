@@ -229,7 +229,21 @@ def update_device_netbox(dev, result, role):
                             {'device': dev.name, 'type': result['device_type'], 'tenant': dev.tenant.name,
                              'role': role})
         else:  # the device name doesn't match with pywire
-            data_found_not_match.append(result)
+            # Read data from spreadsheet (Yann) and update device in Netbox ............Updated when roles are added
+            creds = ServiceAccountCredentials.from_json_keyfile_name('secre_key.json', SCOPES)
+            file = gspread.authorize(creds)
+            workbook = file.open('data_migration')
+            worksheet = workbook.worksheet('data_found_not_match')
+            existing_data = worksheet.get_all_records()
+            for data in existing_data:
+                if 'https://' in data['device_type']:
+                    dev_id = data['device_type'].split('device-types/')[1].split('/')[0]
+                    dev_type = nb.dcim.device_types.get(id=dev_id)
+                    dev.update({'device_type':dev_type})
+                    print(f'{dev} : is updated : dvice_type: {dev_type}')
+                else:
+                    data_found_not_match.append(result)
+
     else:  # the device is not found
         data_not_found.append(dev.name)
 
@@ -254,7 +268,7 @@ def update_generic_devices(token):
     data_updated = []
     data_type_or_role_none = []
     data_role_type_exists = []
-    data_alredy_updated = []
+    data_already_updated = []
     data_found_not_match = []
     data_not_found = []
     data_no_respect_inames = []
@@ -275,6 +289,7 @@ def update_generic_devices(token):
     regexEmb    = "^[A-Za-z-0-9]+[E|X]LF\d{3}-(\d{2})$"  # embrionix
     switchregex = r"MTL-\w{4}-[a-zA-Z]{3}-\w+"
 
+    tag = nb.extras.tags.get(name='yaml_update')
     for dev in devices:
         app1 = re.match(regexApp1, dev.name)
         app2 = re.match(regexApp2, dev.name)
@@ -283,7 +298,7 @@ def update_generic_devices(token):
         emb = re.match(regexEmb, dev.name)
         swt = re.match(switchregex, dev.name)
         #check if the device is already updated
-        tag = nb.extras.tags.get(name='yaml_update')
+
         if dev.device_type.display != 'Generic' and dev.device_role.display != 'Generic' and tag not in dev.tags:
             new_tags = [tag] + dev.tags
             dev.update({'tags': new_tags})
@@ -300,7 +315,7 @@ def update_generic_devices(token):
                 data_updated.extend(data[3])
                 data_found_not_match.extend(data[4])
                 data_not_found.extend(data[5])
-                data_alredy_updated.extend(data[6])
+                data_already_updated.extend(data[6])
                 data_type_or_role_none.extend(data[7])
                 data_role_type_exists.extend(data[8])
 
@@ -314,7 +329,7 @@ def update_generic_devices(token):
                 data_updated.extend(data[3])
                 data_found_not_match.extend(data[4])
                 data_not_found.extend(data[5])
-                data_alredy_updated.extend(data[6])
+                data_already_updated.extend(data[6])
                 data_type_or_role_none.extend(data[7])
                 data_role_type_exists.extend(data[8])
 
@@ -339,7 +354,7 @@ def update_generic_devices(token):
                 data_updated.extend(data[3])
                 data_found_not_match.extend(data[4])
                 data_not_found.extend(data[5])
-                data_alredy_updated.extend(data[6])
+                data_already_updated.extend(data[6])
                 data_type_or_role_none.extend(data[7])
                 data_role_type_exists.extend(data[8])
 
@@ -353,7 +368,7 @@ def update_generic_devices(token):
                 data_updated.extend(data[3])
                 data_found_not_match.extend(data[4])
                 data_not_found.extend(data[5])
-                data_alredy_updated.extend(data[6])
+                data_already_updated.extend(data[6])
                 data_type_or_role_none.extend(data[7])
                 data_role_type_exists.extend(data[8])
 
@@ -391,7 +406,7 @@ def update_generic_devices(token):
                 data_updated.extend(data[3])
                 data_found_not_match.extend(data[4])
                 data_not_found.extend(data[5])
-                data_alredy_updated.extend(data[6])
+                data_already_updated.extend(data[6])
                 data_type_or_role_none.extend(data[7])
                 data_role_type_exists.extend(data[8])
 
@@ -436,8 +451,8 @@ def update_generic_devices(token):
     print(f'data_role_type_exists {len(data_role_type_exists)}')
     print(data_role_type_exists)
     print('------------------------------------------')
-    print(f'data_alredy_updated {len(data_alredy_updated)}')
-    print(data_alredy_updated)
+    print(f'data_alredy_updated {len(data_already_updated)}')
+    print(data_already_updated)
     print('------------------------------------------')
     print(f'data_updated: {len(data_updated)}')
     print(data_updated)
@@ -448,9 +463,6 @@ def update_generic_devices(token):
     print(f'data_no_role {len(data_no_role)}')
     print(data_no_role)
     print('------------------------------------------')
-    # Update google spreadsheet
-    update_data_not_found_spreadsheet(data_not_found)
-    update_data_found_not_match(data_found_not_match)
     # Update Confluence page
     type_counts = {}
     for item in data_no_device_type:
@@ -481,6 +493,9 @@ def update_generic_devices(token):
             ip_prod_updated.append(dev)
     total_applications = len(app1_total) + len(app2_total) + len(app3_total)
     update_conflence_page(total_devices, len(total_updated), len(data_embrionix), len(data_not_found), len(data_role_and_type_none), len(data_no_device_type), len(data_no_role), len(data_found_not_match),top_10_items, len(ip_pres_updated), len(ip_prod_updated), total_applications, len(data_switches), len(bed_total), len(data_updated), len(data_role_type_exists), len(data_no_respect_inames))
+    # Update google spreadsheet
+    # update_data_not_found_spreadsheet(data_not_found)
+    # update_data_found_not_match(data_found_not_match)
 
 ####################################################################
 #                     Update Confluence page
