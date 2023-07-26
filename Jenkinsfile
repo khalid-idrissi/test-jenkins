@@ -10,7 +10,7 @@ pipeline {
         stage('Intsall Packages') {
             steps {
                 echo "Intsall Packages"
-                bat 'pip install pynetbox'
+                bat "pip install pynetbox"
             }
         }
         stage('Test') {
