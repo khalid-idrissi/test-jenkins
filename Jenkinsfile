@@ -16,7 +16,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'testing'
-                bat "py jenkins.py ${netboxtoken} ${tokenpywire} ${tokenatlassian} ${secretfile}"
+                bat "C:\\Python311\\python.exe jenkins.py ${netboxtoken} ${tokenpywire} ${tokenatlassian} ${secretfile}"
 
             }
         }
