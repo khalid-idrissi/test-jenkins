@@ -10,13 +10,13 @@ pipeline {
         stage('Intsall Packages') {
             steps {
                 echo "Intsall Packages"
-                bat "pip install pynetbox"
+                bat "C:\\Users\\IdrissiK.CBCRC\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pip.exe install pynetbox"
             }
         }
         stage('Test') {
             steps {
                 echo 'testing'
-                bat "C:\\Python311\\python.exe jenkins.py ${netboxtoken} ${tokenpywire} ${tokenatlassian} ${secretfile}"
+                bat "C:\\Users\\IdrissiK.CBCRC\\AppData\\Local\\Programs\\Python\\Python311\\python.exe jenkins.py ${netboxtoken} ${tokenpywire} ${tokenatlassian} ${secretfile}"
 
             }
         }
