@@ -559,6 +559,5 @@ def update_data_not_found_spreadsheet(data_not_found):
 #                     Main
 ####################################################################
 if __name__ == '__main__':
-    print('test script')
-    # token_result = get_token(tpywire)
-    # update_generic_devices(token_result)
+    token_result = get_token(tpywire)
+    update_generic_devices(token_result)
