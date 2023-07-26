@@ -10,7 +10,7 @@ pipeline {
         stage('Intsall Packages') {
             steps {
                 echo "Intsall Packages"
-                bat "C:\\Users\\IdrissiK.CBCRC\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pip.exe install -r requirements.txt"
+//                 bat "C:\\Users\\IdrissiK.CBCRC\\AppData\\Local\\Programs\\Python\\Python311\\Scripts\\pip.exe install -r requirements.txt"
             }
         }
         stage('Test') {
