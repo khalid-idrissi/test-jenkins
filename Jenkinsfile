@@ -9,8 +9,8 @@ pipeline {
     stages {
         stage('Intsall Packages') {
             steps {
-				echo "Intsall Packages"
-// 				bat "pip install -r requirements.txt"
+		    echo "Intsall Packages"
+ 		    bat "pip install -r requirements.txt"
             }
         }
         stage('Test') {
