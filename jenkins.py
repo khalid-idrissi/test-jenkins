@@ -11,18 +11,11 @@ from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
 
 urllib3.disable_warnings()
-# # Access environment variables
-# tnetbox = sys.argv[1]
-# tpywire = sys.argv[2]
-# atlassiantoken = sys.argv[3]
-# secret_file = sys.argv[4]
-
-# local execution
-tnetbox = '048bf3943797d831c88f95c4faef8ae3b3d9b084'
-tpywire = 'SWRyaXNzaUs6UVdBU3h1MDFleDUy'
-atlassiantoken = 'ATATT3xFfGF02QlIA-i7w9YHB2zcunFqK-mpshJueL-OyQi7j2jx9DIgjDkdnd6sqcaaEEJ49Gr6CWy4K8CUTuYaVXYYvqkx2yUtwz_ZatAfgcmkSbe4hBO_yIbzswR3D2e4E1_3iNqRWODBo_7ZXBjsTDGk-9bn4H7vr62gm0Qk5ZRmBWGVDvM=3A516F12'
-secret_file = 'C:\\Users\\IdrissiK.CBCRC\\Desktop\\khalid\\master\\istm-pywire\\importation_equipements\\secre_key.json'
-
+# Access environment variables
+tnetbox = sys.argv[1]
+tpywire = sys.argv[2]
+atlassiantoken = sys.argv[3]
+secret_file = sys.argv[4]
 #pynetbox
 nb = pynetbox.api(
             url='https://netbox.cbc-rc.ca/',
